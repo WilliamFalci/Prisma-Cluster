@@ -49,14 +49,11 @@ The Repository will be updated everytime it's needed, the same project is releas
       └─> Development Workflow
           ├─ Fetch changes
           ├─ run the global deploy (to apply all migrations changes) using Prisma Cluster CLI
-          |  └─> if the devs deleted some services check it and apply the deleation manually using Prisma Cluster CLI
           └─ test
              └─ at the end of the test if stable make a pull request to Master branch
                 └─> Production Workflow
                    ├─ Fetch changes
-                   └─> run the global deploy (to apply all migrations changes) using Prisma Cluster CLI
-                       └─> if the devs deleted some services check it and apply delete manually using Prisma Cluster CLI
-   
+                   └─> run the global deploy (to apply all migrations changes) using Prisma Cluster CLI   
 ```
 
 ## Project Tree
