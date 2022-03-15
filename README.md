@@ -110,7 +110,7 @@ The Repository will be updated everytime it's needed, the same project is releas
 |  ├─ docker-compose.yml
 |  └─ server.sh
 ├─ RPC  
-|  ├─ node_modules                        (not provided - run yarn from this RPC folder)
+|  ├─ node_modules                        (not provided - run yarn from RPC folder)
 |  ├─ services
 |  |  └─ [service-name] * n
 |  |     ├─ controller                    (rpc server functions)
