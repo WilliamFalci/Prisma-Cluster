@@ -136,7 +136,7 @@ The Repository will be updated everytime it's needed, the same project is releas
 ```
 ## PRISMA CLUSTER CLI
 
-- Locate `euroingro-services/CLI`
+- Locate `prisma-cluster/CLI`
 - From the folder run `yarn rpc [commands]`
 - 
 ### Available commands:
