@@ -1,0 +1,33 @@
+version: "3.8"
+
+volumes:
+  cluster_postgres_data: {}
+  
+services:
+  services-cluster:
+    container_name: microservices-cluster
+    image: postgres:14.2
+    restart: unless-stopped
+    ports:
+      - ${POSTGRES_PORT}:5432
+    environment:
+      POSTGRES_DB: master
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    extra_hosts:
+      - master_node:192.168.3.160
+    command: postgres -c config_file=/cluster_config/postgresql.conf -c hba_file=/cluster_config/pg_hba.conf
+    volumes:
+      - cluster_postgres_data:/var/lib/postgresql/data
+      - ./replication/init:/docker-entrypoint-initdb.d
+    configs:
+      - source: pg_hba
+        target: /cluster_config/pg_hba.conf
+      - source: postgresql
+        target: /cluster_config/postgresql.conf
+
+configs:
+  pg_hba:
+    file: ./replication/config/pg_hba.conf
+  postgresql:
+    file: ./replication/config/postgresql.conf

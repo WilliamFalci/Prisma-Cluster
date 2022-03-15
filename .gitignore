@@ -1,0 +1,21 @@
+# NODE (RPC)
+node_modules
+yarn.lock
+yarn-error.log
+
+# CLI
+CLI/env/.env
+CLI/env/.env.*
+
+# DOCKER POSTGRES DB
+pg_hba.conf
+postgresql.conf
+database/replication/env/.env
+database/replication/env/.env.*
+database/replication/init/*
+
+# DOCKER COMPOSE
+database/docker-compose.replication.yml
+
+# SERVICES
+services-backups/*

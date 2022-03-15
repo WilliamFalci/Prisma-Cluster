@@ -1,0 +1,12 @@
+{
+  "name": "rpc_cli",
+  "version": "1.0.0",
+  "main": "rpc.sh",
+  "author": "Falci William Peter",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "rpc" : "./rpc.sh",
+    "debug:rpc" : "bash -x ./rpc.sh"
+  }
+}

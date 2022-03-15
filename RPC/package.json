@@ -1,0 +1,12 @@
+{
+  "name": "euroingro_server_rpc",
+  "version": "1.0.0",
+  "main": "server_rpc.js",
+  "author": "Falci William Peter",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "jayson": "^3.6.6",
+    "dotenv": "^16.0.0"
+  }
+}
