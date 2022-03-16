@@ -10,12 +10,12 @@ CLI/env/.env.*
 # DOCKER POSTGRES DB
 pg_hba.conf
 postgresql.conf
-database/replication/env/.env
-database/replication/env/.env.*
-database/replication/init/*
+.env.replication
+DB/replication/env/.env
+DB/replication/init/*
 
 # DOCKER COMPOSE
-database/docker-compose.replication.yml
+docker-compose.replication.yml
 
 # SERVICES
 services-backups/*
