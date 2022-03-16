@@ -21,6 +21,9 @@ read -r operator
 echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Delete' -t 'Please insert the reason of deletion')
 read -r reason
 
+if [ ! -d "$SERVICES_DELETED_PATH" ]; then
+  mkdir -p "$SERVICES_DELETED_PATH"
+fi
 
 touch $SERVICES_DELETED_PATH/$1
 printf "Dev: $operator" > $SERVICES_DELETED_PATH/$1
