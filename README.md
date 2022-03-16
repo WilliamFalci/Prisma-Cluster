@@ -245,9 +245,9 @@ In ```prisma-cluster/DB/replication/env/env.replication``` apply:
 
 #### Creation of a publication (to run on First Server):
 
-- From psql run  ```CREATE PUBLICATION [table-name]_pub FOR TABLE [table-name];``` - This will create the publication
-- From psql run ```GRANT ALL ON [table-name] TO [first-server-replication-user];``` - This will grant the access
-- Then run ```pg_dump -U [first-server-root] -d [first-server-db] -t [table-name] -s | psql -U [POSTGRES_SLAVE_USER from ./database/.env.replication] -d master -h slave_node``` this will apply the schema on slave server (this poject server)
+- From psql run  ```psql CREATE PUBLICATION [table-name]_pub FOR TABLE [table-name];``` - This will create the publication
+- From psql run ```psql GRANT ALL ON [table-name] TO [first-server-replication-user];``` - This will grant the access
+- From psql run ```psql pg_dump -U [first-server-root] -d [first-server-db] -t [table-name] -s | psql -U [POSTGRES_SLAVE_USER from ./database/.env.replication] -d master -h slave_node``` this will apply the schema on slave server (this poject server)
 - Now you can subscribe from the slave server 
 
 #### Subscription (to run from Second Server)
@@ -260,3 +260,21 @@ If you did everything right then will work XD
 
 
 What do this script? The script will add the table to ```tables``` to keep track of tables subscribed, then generate the SQL of subscription under ```prisma-cluster/DB/replication/init``` in this way everytime the docker will be mounted will import the subscriptions if they not exist already, then if the docker container is running will directly invoke psql to generate the subscription
+
+----------------------
+
+## Use this project in real case of development/production
+
+- Create your own empty private repository
+- Clone the project ```https://github.com/WilliamFalci/Prisma-Cluster.git```
+- Run ```cd Prisma-Cluster```
+- Run ```git remote rename origin public```
+- Run ```git remote set-url --push public DISABLE```
+- Run ```git remote add own [uri-of-your-private-repository]```
+
+In this way:
+
+- You will be able to fetch/pull from this public repository
+- You will be able to fetch/pull/push from your own private repository
+- You will be able to modify the gitignore based on your necessity
+
