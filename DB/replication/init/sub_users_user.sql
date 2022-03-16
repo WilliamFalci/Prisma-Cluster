@@ -1,1 +1,0 @@
-CREATE SUBSCRIPTION users_user_sub CONNECTION 'dbname=euroingro host=master_node user=repl_user password=LgbBDxQbZKPu9aYiQjGQUArSBvVZ2jbZGQNV4WmB' PUBLICATION users_user_pub
