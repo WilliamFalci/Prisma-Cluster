@@ -14,6 +14,10 @@ echo $(print_message -i 'continue' -m 'Backup' -s "Global" -t 'Current envirotme
 currentDate=$(date +%d-%m-%Y"_"%H_%M_%S)
 bk_name=dump_${currentDate}.sql
 
+if [ ! -d "$SERVICES_BACKUP" ]; then
+  mkdir -p "$SERVICES_BACKUP"
+fi
+
 mkdir -p "$SERVICES_BACKUP/$currentDate"
 mkdir -p "$SERVICES_BACKUP/$currentDate/env"
 mkdir -p "$SERVICES_BACKUP/$currentDate/db"
