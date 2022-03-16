@@ -40,7 +40,7 @@ The Repository will be updated everytime it's needed, the same project is releas
 
 ## What is Prisma Cluster?
 
-Prisma Cluster is an Full Stack Service Manager, usign the Next-Generation ORM [Prisma](https://github.com/prisma/prisma) and the Powerfull of [Jayson RPC](https://github.com/tedeh/jayson) + Dockerized Postgres, Prisma Cluster allow you to create an cluster of Database with: 
+Prisma Cluster is an **Full Stack Service Manager**, using the Next-Generation ORM [Prisma](https://github.com/prisma/prisma) and the Powerfull of [Jayson RPC](https://github.com/tedeh/jayson) + Dockerized Postgres, Prisma Cluster allow you to create an cluster of Databases with: 
 
 - (Optional Slave DB connected with external Parent DB)
 - Unique Database per service with specify user / credentials
@@ -51,7 +51,16 @@ Prisma Cluster is an Full Stack Service Manager, usign the Next-Generation ORM [
 - Import Tables / Data from existing projects
 - Generate Model and Interface using Database Introspection
 
-All that just using the CLI, allowing you to focus on logical service architecture without lose time on configurations and links
+All that just using the CLI, allowing you to focus on logical service architecture without lose time on configurations and links.
+
+**Prisma** is the **ORM**, generate the models and client interface (for client interface I mean the client library to retrieve database objects)
+**Jayson** is the **RPC Compilant**, will be in listening on TCP Port (default: 3000) and will determinate the service's router, method and controler to invoke
+
+<p align="center">Look at <a href="#locigal_architecture">Logical Architecture</a> to understand the pipeline</p>
+
+- **Why Prisma Cluster is in listening on TCP and not on HTTP/s?**
+
+Simple, many devs / sites / platforms are already stuctured with API, plus for security reasons many don't want expose directly the Database server, so... to make comfortable with the major realities outside here the most simple solution is to make the RPC call from your API server, in this way the API server will delivery directly the result of the RPC call without expose the database server
 
 ----------------------
 
@@ -81,7 +90,8 @@ All that just using the CLI, allowing you to focus on logical service architectu
 
 <a name="locigal_architecture"></a>
 ## Logical Architecture
-![Schermata del 2022-03-08 18-21-16](https://user-images.githubusercontent.com/36926081/157291288-3b59caa9-5b69-4c3e-b53e-f9bb39d6efd4.png)
+<p align="center">Simple example of this project architecture with 2 services</p>
+<img src="https://user-images.githubusercontent.com/36926081/157291288-3b59caa9-5b69-4c3e-b53e-f9bb39d6efd4.png">
 
 <a name="workflow"></a>
 ## Workflow
