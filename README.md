@@ -245,9 +245,9 @@ In ```prisma-cluster/DB/replication/env/env.replication``` apply:
 
 #### Creation of a publication (to run on First Server):
 
-- From psql run  ```psql CREATE PUBLICATION [table-name]_pub FOR TABLE [table-name];``` - This will create the publication
-- From psql run ```psql GRANT ALL ON [table-name] TO [first-server-replication-user];``` - This will grant the access
-- From psql run ```psql pg_dump -U [first-server-root] -d [first-server-db] -t [table-name] -s | psql -U [POSTGRES_SLAVE_USER from ./database/.env.replication] -d master -h slave_node``` this will apply the schema on slave server (this poject server)
+- From psql run  ```CREATE PUBLICATION [table-name]_pub FOR TABLE [table-name];``` - This will create the publication
+- From psql run ```GRANT ALL ON [table-name] TO [first-server-replication-user];``` - This will grant the access
+- Then run ```pg_dump -U [first-server-root] -d [first-server-db] -t [table-name] -s | psql -U [POSTGRES_SLAVE_USER from ./database/.env.replication] -d master -h slave_node``` this will apply the schema on slave server (this poject server)
 - Now you can subscribe from the slave server 
 
 #### Subscription (to run from Second Server)
