@@ -219,7 +219,7 @@ All that just using the CLI, allowing you to focus on logical service architectu
 - - Deletion of [service-name] DB's user
 - - Deletion of enviroment variables related to [service-name] DB's user
 - - Deletion of [service-name] router injection into RPC router ```[root]/router.js```
-- - Create a deletion file under ```./services-deleted/' named with [service-name] and containing Operator's Name and Reason of deletion
+- - Create a deletion file under ```./services-deleted/``` named with [service-name] and containing Operator's Name and Reason of deletion
 
 #### SERVICE > METHOD:
 - Will create the method of the service running automatically this actions:
@@ -246,7 +246,7 @@ All that just using the CLI, allowing you to focus on logical service architectu
 - Will zip the all previous points
 
 #### BACKUP > ROLLBACK (ATTENTION ON USE IT):
-- Will apply the backup you specifiend deletegin all services and databases to re-apply them from the backup
+- Will apply the backup you specifiend deleting all services and databases to re-apply them from the backup
 
 #### DB > IMPORT:
 - Will run the sql file to the service's db, the file must be located under `/database/import`
@@ -296,9 +296,9 @@ In ```prisma-cluster/DB/replication/env/env.replication``` apply:
 
 #### Creation of a publication (to run on First Server):
 
-- From psql run  ```psql CREATE PUBLICATION [table-name]_pub FOR TABLE [table-name];``` - This will create the publication
-- From psql run ```psql GRANT ALL ON [table-name] TO [first-server-replication-user];``` - This will grant the access
-- From psql run ```psql pg_dump -U [first-server-root] -d [first-server-db] -t [table-name] -s | psql -U [POSTGRES_SLAVE_USER from ./database/.env.replication] -d master -h slave_node``` this will apply the schema on slave server (this poject server)
+- Run ```psql CREATE PUBLICATION [table-name]_pub FOR TABLE [table-name];``` - This will create the publication
+- Run ```psql GRANT ALL ON [table-name] TO [first-server-replication-user];``` - This will grant the access
+- Run ```psql pg_dump -U [first-server-root] -d [first-server-db] -t [table-name] -s | psql -U [POSTGRES_SLAVE_USER from ./database/.env.replication] -d master -h slave_node``` this will apply the schema on slave server (this poject server)
 - Now you can subscribe from the slave server 
 
 #### Subscription (to run from Second Server)
