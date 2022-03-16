@@ -1,7 +1,31 @@
-# PRISMA CLUSTER
+# <p align="center">PRISMA CLUSTER</p>
+##### <p align="center">Created with love from Italy :green_heart::white_heart::heart:</p>
+<p align="center">
+   <a href="#disclaimer">Disclaimer</a>
+   ・
+   <a href="#what_is">What is Prisma Cluster</a>
+   ・
+   <a href="#features">Features</a>
+   ・
+   <a href="#global_requirements">Global Requirements</a>
+   ・
+   <a href="#locigal_architecture">Logical Architecture</a>
+   ・
+   <a href="#workflow">Prdocution Workflow</a>
+   ・
+   <a href="#project_tree">Project Tree</a>
+   ・
+   <a href="#cli">CLI</a>
+   ・
+   <a href="#replication">Replication</a>
+   ・
+   <a href="#howtoclone">How to clone for dev/prod</a>
+</p>
 
-Created with:[![Generic badge](https://img.shields.io/badge/prisma-3.10.0-blue.svg)](https://www.prisma.io/) [![Generic badge](https://img.shields.io/badge/yarn-1.22.10-cyan.svg)](https://yarnpkg.com/) [![Generic badge](https://img.shields.io/badge/npx-8.5.1-red.svg)](https://www.npmjs.com/package/npx) [![Generic badge](https://img.shields.io/badge/node-16.0.0-green.svg)](https://nodejs.org/it) [![Generic badge](https://img.shields.io/badge/dotenvcli-5.0.0-magenta.svg)](https://www.npmjs.com/package/dotenv-cli) [![Generic badge](https://img.shields.io/badge/docker-20.10.12-blue.svg)](https://www.docker.com/) [![Generic badge](https://img.shields.io/badge/dockercompose-2.3.3-blue.svg)](https://docs.docker.com/compose/) [![Generic badge](https://img.shields.io/badge/jayson-3.6.6-blue.svg)](https://github.com/tedeh/jayson) 
+Created with: <p align="center">[![Generic badge](https://img.shields.io/badge/prisma-3.10.0-blue.svg)](https://www.prisma.io/) [![Generic badge](https://img.shields.io/badge/yarn-1.22.10-cyan.svg)](https://yarnpkg.com/) [![Generic badge](https://img.shields.io/badge/npx-8.5.1-red.svg)](https://www.npmjs.com/package/npx) [![Generic badge](https://img.shields.io/badge/node-16.0.0-green.svg)](https://nodejs.org/it) [![Generic badge](https://img.shields.io/badge/dotenvcli-5.0.0-magenta.svg)](https://www.npmjs.com/package/dotenv-cli) [![Generic badge](https://img.shields.io/badge/docker-20.10.12-blue.svg)](https://www.docker.com/) [![Generic badge](https://img.shields.io/badge/dockercompose-2.3.3-blue.svg)](https://docs.docker.com/compose/) [![Generic badge](https://img.shields.io/badge/jayson-3.6.6-blue.svg)](https://github.com/tedeh/jayson)</p>
+
 ----------------------
+<a name="disclaimer"></a>
 ## Disclaimer
 
 Prisma Cluster is not officially Releated to Prisma.io , I named this project "Prisma Cluster" because it use the powerfull of Prisma's introspection and interfacing .
@@ -10,10 +34,28 @@ This project have the goal to make more "simple" make an Microservice infrastruc
 
 The Repository will be updated everytime it's needed, the same project is released with Open Source License, The usage and configuration is your business.
 
-## Example of 2 services
-![Schermata del 2022-03-08 18-21-16](https://user-images.githubusercontent.com/36926081/157291288-3b59caa9-5b69-4c3e-b53e-f9bb39d6efd4.png)
+----------------------
+
+<a name="what_is"></a>
+
+## What is Prisma Cluster?
+
+Prisma Cluster is an Full Stack Service Manager, usign the Next-Generation ORM [Prisma](https://github.com/prisma/prisma) and the Powerfull of [Jayson RPC](https://github.com/tedeh/jayson) + Dockerized Postgres, Prisma Cluster allow you to create an cluster of Database with: 
+
+- (Optional Slave DB connected with external Parent DB)
+- Unique Database per service with specify user / credentials
+- Automatic link to Service DB with Service Controller and RPC server
+- Full Backup creation
+- Full Rollback to an specific Backup
+- Service deletion tracker
+- Import Tables / Data from existing projects
+- Generate Model and Interface using Database Introspection
+
+All that just using the CLI, allowing you to focus on logical service architecture without lose time on configurations and links
 
 ----------------------
+
+<a name="features"></a>
 
 ## Features
 - [x] Service Creation
@@ -29,6 +71,7 @@ The Repository will be updated everytime it's needed, the same project is releas
 - [ ] RPC Client using Jayson (Will be applied to API Server - resource external from this repository)
 - [ ] Write documentation on "Quick Start"
 
+<a name="global_requirements"></a>
 ## Global Requirements
 - Node
 - Docker
@@ -36,6 +79,11 @@ The Repository will be updated everytime it's needed, the same project is releas
 - [Prisma](https://www.prisma.io/docs/concepts/components/prisma-cli/installation): `yarn global add prisma`
 - Dotenv-cli: `yarn global add dotenv-cli`
 
+<a name="locigal_architecture"></a>
+## Logical Architecture
+![Schermata del 2022-03-08 18-21-16](https://user-images.githubusercontent.com/36926081/157291288-3b59caa9-5b69-4c3e-b53e-f9bb39d6efd4.png)
+
+<a name="workflow"></a>
 ## Workflow
 
 ```plaintext
@@ -55,7 +103,7 @@ The Repository will be updated everytime it's needed, the same project is releas
                    ├─ Fetch changes
                    └─> run the global deploy (to apply all migrations changes) using Prisma Cluster CLI   
 ```
-
+<a name="project_tree"></a>
 ## Project Tree
 ```plaintext
 ┌ prisma-cluster
@@ -131,6 +179,8 @@ The Repository will be updated everytime it's needed, the same project is releas
 ├─ .gitignore
 └─ README.md
 ```
+
+<a name="cli"></a>
 ## PRISMA CLUSTER CLI
 
 - Locate `prisma-cluster/CLI`
@@ -206,6 +256,7 @@ The Repository will be updated everytime it's needed, the same project is releas
 
 ----------------------
 
+<a name="replication"></a>
 ## POSTGRES REPLICATION SLAVE MODE
 
 ### Quick Start
@@ -263,6 +314,7 @@ What do this script? The script will add the table to ```tables``` to keep track
 
 ----------------------
 
+<a name="howtoclone"></a>
 ## Use this project in real case of development/production
 
 - Create your own empty private repository
