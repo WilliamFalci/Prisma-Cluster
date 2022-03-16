@@ -185,7 +185,7 @@ All that just using the CLI, allowing you to focus on logical service architectu
 
 - Locate `prisma-cluster/CLI`
 - From the folder run `yarn rpc [commands]`
-- 
+
 ### Available commands:
 - **SERVICE**
 - - **Create**: ```yarn rpc service create [service-name]```
