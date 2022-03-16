@@ -54,9 +54,11 @@ Prisma Cluster is an **Full Stack Service Manager**, using the Next-Generation O
 All that just using the CLI, allowing you to focus on logical service architecture without lose time on configurations and links.
 
 **Prisma** is the **ORM**, generate the models and client interface (for client interface I mean the client library to retrieve database objects)
+
 **Jayson** is the **RPC Compilant**, will be in listening on TCP Port (default: 3000) and will determinate the service's router, method and controler to invoke
 
 <p align="center">Look at <a href="#locigal_architecture">Logical Architecture</a> to understand the pipeline</p>
+
 
 - **Why Prisma Cluster is in listening on TCP and not on HTTP/s?**
 
