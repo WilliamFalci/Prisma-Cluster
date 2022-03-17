@@ -6,7 +6,7 @@ source ./env/.env
 source ./helpers/text.sh
 
 echo "$TBOLD"'⋗ PRISMA CLUSTER MANAGEMENT ⋖'"$TREGULAR"
-echo "$TBOLD"'⋗ Don'"'"'t run any operation if you don'"'"'t know what are you doing! ⋖'"$TREGULAR"
+echo "$TBOLD"'⋗ Don'"'"'t run any operation if you don'"'"'t know what you are doing! ⋖'"$TREGULAR"
 echo "$TBOLD"'⋗ Author: Falci William Peter ⋖'"$TREGULAR"
 printf "\n\n"
 
