@@ -19,8 +19,7 @@ service=$1
 if [ -d "$SERVICES_PATH/$service" ]; then
   echo $(print_message -i 'continue' -m 'DB' -s "$service" -c 'Fetch' -a 'Prisma' -t 'Invoked to run the introspection...')
   cd $SERVICES_PATH/$service/model
-  echo $SERVICES_PATH/$service/model
-  echo $SERVICE_EMAILER_DB_URL
+
   dotenv -e $ENV_PATH/.env -- npx prisma db pull
   echo $(print_message -i 'continue' -m 'DB' -s "$service" -c 'Fetch' -a 'Prisma' -t 'Introspection done')
 
