@@ -202,7 +202,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - **SERVICE**
 - - **Create**: ```yarn rpc service create [service-name]```
 - - **Delete**: ```yarn rpc service delete [service-name]```
-- - **Method**: ```yarn rpc service method [service-name] add [method-name]```
+- - **Method**: ```yarn rpc service method [service-name] [action: add/delete] [method-name]```
 - - **Migrate**: ```yarn rpc service migrate [mode/service-name]```
 - - - Specific Service: ```yarn rpc service migrate [service-name]```
 - - - All Services: ```yarn rpc service migrate global```
@@ -234,12 +234,18 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - - Create a deletion file under ```./services-deleted/``` named with [service-name] and containing Operator's Name and Reason of deletion
 
 #### SERVICE > METHOD:
-- Will create the method of the service running automatically this actions:
-- - Creation of [method-name] controller under ```./services/[service-name]/controllers/[method-name]_controller.js```
-- - Creation of [method-name] method under ```./services/[service-name]/methods/[method-name]_method.js```
-- - Injection of [method-name] into [service-name]'s router
-- - Auto configuration of [method-name] controller with [service-name]'s model interface
-
+- ADD:
+- - Will create the method of the service running automatically this actions:
+- - - Creation of [method-name] controller under ```./services/[service-name]/controllers/[method-name]_controller.js```
+- - - Creation of [method-name] method under ```./services/[service-name]/methods/[method-name]_method.js```
+- - - Injection of [method-name] into [service-name]'s router
+- - - Auto configuration of [method-name] controller with [service-name]'s model interface into ```[method-name]_controller.js```
+- DELETE:
+- - Will delete the method of the service running automatically this actions:
+- - - Deletion of [method-name] controller under ```./services/[service-name]/controllers/[method-name]_controller.js```
+- - - Deletion of [method-name] method under ```./services/[service-name]/methods/[method-name]_method.js```
+- - - Deletion of injection into [service-name]'s router
+- - - Auto configuration of [method-name] controller with [service-name]'s model interface into ```[method-name]_controller.js```
 #### SERVICE > MIGRATE:
 - Apply schema changes to DB
 - Make migration file

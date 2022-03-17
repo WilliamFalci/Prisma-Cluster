@@ -24,7 +24,6 @@ if [ "$1" == 'add' ]; then
     exit
   fi
   method_name=$2
-
   
   controller_code="
     const path = require('path');
@@ -54,7 +53,34 @@ if [ "$1" == 'add' ]; then
   echo $(print_message -i 'continue' -m 'Service' -s 'Method' -c 'Add' -t ''"$method_name"' > Method created')
 
   echo -e "const ${method_name}_method = require('./methods/${method_name}_method')\n$(cat $SERVICES_PATH/$service/router.js)" > $SERVICES_PATH/$service/router.js
-  sed -i "/^module.exports = {/a \  $method_name: (args,callback) => ${method_name}_method(args, callback)" $SERVICES_PATH/$service/router.js
+  
+  sed -i "/^module.exports = {/a\ \ ${method_name}: (args,callback) => ${method_name}_method(args, callback)," $SERVICES_PATH/$service/router.js
+
+
   echo $(print_message -i 'continue' -m 'Service' -s 'Method' -c 'Add' -t ''"$method_name"' > Route added')
   echo $(print_message -i 'end' -m 'Service' -s 'Method' -c 'Add' -t ''"$method_name"' Done')
+fi
+
+if [ "$1" == 'delete' ]; then
+  while true; do
+    echo $(print_message -w 'true' -i 'continue' -m 'Service' -s "$1" -c 'Method' -a "$2" -t 'Are you sure to delete this method? You will lose all code related of this method [y/n]')
+    read yn
+    case $yn in
+      [Yy]* ) break;;
+      [Nn]* ) echo $(print_message -i 'end' -m 'Service' -s "$1" -c 'Method' -a "$2" -t 'Delete aborted'); exit;;
+      * )  echo $(print_message -i 'continue' -m 'Service' -s "$2" -c 'Delete' -a 'Answer' -t 'Invalid! Please answer yes or no [y/n]');;    
+    esac
+  done
+  method_name=$2
+
+  rm -rf $SERVICES_PATH/$service/controllers/${method_name}_controller.js || true
+  echo $(print_message -i 'continue' -m 'Service' -s 'Method' -c 'Delete' -t ''"$method_name"' > Controller deleted')
+  rm -rf $SERVICES_PATH/$service/methods/${method_name}_method.js || true
+  echo $(print_message -i 'continue' -m 'Service' -s 'Method' -c 'Delete' -t ''"$method_name"' > Method deleted')
+
+  sed -i "/const ${method_name}_method = require('.\/methods\/${method_name}_method')/d" $SERVICES_PATH/$service/router.js
+  sed -i "/\ \ ${method_name}: (args,callback) => ${method_name}_method(args, callback),/d" $SERVICES_PATH/$service/router.js
+
+  echo $(print_message -i 'continue' -m 'Service' -s 'Method' -c 'Delete' -t ''"$method_name"' > Removed from router')
+  echo $(print_message -i 'end' -m 'Service' -s 'Method' -c 'Delete' -t ''"$method_name"' Done')
 fi
