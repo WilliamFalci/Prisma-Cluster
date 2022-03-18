@@ -45,8 +45,8 @@ if [ "$1" == 'add' ]; then
     const ${method_name}_controller = require('../controllers/${method_name}_controller')
     \n
     \nmodule.exports = async (args,callback) => { 
-    \n\tconst result = await ${method_name}_controller(args)
-    \n\treturn callback(null,result)
+    \n\tconst {error,result} = await ${method_name}_controller(args)
+    \n\treturn callback(error,result)
     \n}
   "
   echo -e $method_code > $SERVICES_PATH/$service/methods/${method_name}_method.js
