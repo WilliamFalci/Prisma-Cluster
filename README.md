@@ -79,7 +79,11 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - [x] Introspection
 - [x] Postgress Replication pre-configured 
 - [x] RPC Server using Jayson
-- [ ] RPC Client using Jayson (Will be applied to API Server - resource external from this repository)
+- [x] RPC Client example using Jayson (look example.client.js)
+- [ ] Realtime Websocket server using Supabase/Realtime (secured by JWT)
+- [ ] Realtime Client example using Supabase/Realtime-js
+- [ ] Possibility to add/remove an entire service to realtime service or just specific tables
+- [ ] Possibility to set / alter RLS policies on service's tables 
 - [ ] Write documentation on "Quick Start"
 
 <a name="global_requirements"></a>
