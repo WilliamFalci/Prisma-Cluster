@@ -85,7 +85,7 @@ if [ "$create_credentials" == "true" ]; then
 
   echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Credentials' -t 'Service'"'"'s db user: '"$service_user"' have now access to '"$1"''"'"'s DB')
 
-  echo -e "const storage_$1 = require('filestorage').create('./buckets/$1')\n$(cat $SERVICES_STORAGES/index.js)" > $SERVICES_STORAGES/index.js
+  echo -e "const storage_$1 = require('filestorage').create(\`\${__dirname}/buckets/$1\`)\n$(cat $SERVICES_STORAGES/index.js)" > $SERVICES_STORAGES/index.js
   sed -i "/^module.exports = {/a\ \ storage_$1," $SERVICES_STORAGES/index.js
 
   echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Storage' -t 'Created')

@@ -64,7 +64,7 @@ while true; do
   esac
 done
 
-sed -i "/const storage_$1 = require('filestorage').create('.\/buckets\/$1')/d" $SERVICES_STORAGES/index.js
+sed -i "/const storage_$1 = require('filestorage').create(\`\${__dirname}\/buckets\/$1\`)/d" $SERVICES_STORAGES/index.js
 sed -i "/\ \ storage_$1,/d" $SERVICES_STORAGES/index.js
 echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Delete' -a 'Storage' -t 'Logical link Deleted')
 
