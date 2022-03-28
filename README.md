@@ -45,6 +45,7 @@ Prisma Cluster is an **Full Stack Service Manager**, using the Next-Generation O
 - (Optional Slave DB connected with external Parent DB)
 - Unique Database per service with specify user / credentials
 - Automatic link to Service DB with Service Controller and RPC server
+- Automatic Storage creation for the service and auto-link with the service's controllers
 - Full Backup creation
 - Full Rollback to an specific Backup
 - Service deletion tracker
@@ -71,6 +72,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 ## Features
 - [x] Service Creation
 - [x] Service Removal
+- [x] Service Storage
 - [x] Service Local Migration
 - [x] Service Dev/Prod Deploy
 - [x] Backup System
@@ -227,6 +229,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - - Creation of [service-name] db into Postgress
 - - Creation of user's db (ower of [service-name] db)
 - - Saving of enviroment variables to link prisma to db created
+- - Creation of the specific Storage Bucket
 
 #### SERVICE > DELETE:
 - Will delete the service running automatically this actions:
@@ -236,6 +239,8 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - - Deletion of enviroment variables related to [service-name] DB's user
 - - Deletion of [service-name] router injection into RPC router ```[root]/router.js```
 - - Create a deletion file under ```./services-deleted/``` named with [service-name] and containing Operator's Name and Reason of deletion
+- - Deletion of Storage logical link
+- - Physically deletion of Service's stored files (optional)
 
 #### SERVICE > METHOD:
 - ADD:

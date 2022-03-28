@@ -82,7 +82,7 @@ if [ $1 == "delete" ]; then
         shift;
         ./modules/services/commands/delete.sh $ENV_PATH $@
         break;;
-      [Nn]* )  echo $(print_message -i 'continue' -m 'Service' -s "$2" -c 'Delete' -t 'Aborted'); exit;;
+      [Nn]* )  echo $(print_message -i 'end' -m 'Service' -s "$2" -c 'Delete' -t 'Aborted'); exit;;
       * )  echo $(print_message -i 'end'-m 'Service' -s "$2" -c 'Delete' -a 'Answer' -t 'Invalid! Please answer yes or no [y/n]');;    
     esac
   done
@@ -102,7 +102,7 @@ if [ $1 == "deploy" ]; then
         shift;
         ./modules/services/commands/deploy.sh $ENV_PATH $@
         break;;
-      [Nn]* )  echo $(print_message -i 'continue' -m 'Service' -s "$2" -c 'Deploy' -t 'Aborted'); exit;;
+      [Nn]* )  echo $(print_message -i 'end' -m 'Service' -s "$2" -c 'Deploy' -t 'Aborted'); exit;;
       * )  echo $(print_message -i 'end' -m 'Service' -s "$2" -c 'Deploy' -a 'Answer' -t 'Invalid! Please answer yes or no [y/n]');;
     
     esac

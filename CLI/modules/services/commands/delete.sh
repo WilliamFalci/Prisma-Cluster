@@ -14,7 +14,6 @@ if [ -z "$1" ]; then
   exit
 fi
 
-
 echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Delete' -t 'Pleas insert your name')
 read -r operator
 
@@ -51,5 +50,24 @@ sed -i '/^$/d' $ENV_PATH/.env
 
 sed -i "/const $1 = require('.\/services\/$1\/router.js');/d" $PROJECT_PATH/RPC/router.js
 sed -i "/methods = Object.assign(methods,{$1: $1})/d" $PROJECT_PATH/RPC/router.js
+echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Delete' -a 'Route' -t 'Deleted')
+
+while true; do
+  echo $(print_message -w 'true' -i 'continue' -m 'Service' -s "$2" -c 'Delete' -a 'Storage' -t "ATTENTION: I will delete anyway the logical link to the storage/index.js, do you want I delete physically the files stored into $1's storage? the deletion will be irreversible, if you are not sure then make a backup of the folder: $SERVICES_STORAGES/buckets/$1 then you can delete manually the folder if you not need it -> [y =  yes delete files stored / n = no keep the files stored and delete only the logical link to the storage]")
+  read yn
+  case $yn in
+    [Yy]* ) 
+      rm -rf ${SERVICES_STORAGES}/buckets/$1 || true;
+      echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Delete' -a 'Storage' -t 'Files Deleted');break;;
+    [Nn]* )  echo $(print_message -i 'end' -m 'Service' -s "$2" -c 'Delete' -a 'Storage' -t 'Aborted'); exit;;
+    * )  echo $(print_message -i 'end'-m 'Service' -s "$2" -c 'Delete' -a 'Answer' -t 'Invalid! Please answer yes or no [y/n]');;    
+  esac
+done
+
+sed -i "/const storage_$1 = require('filestorage').create('.\/buckets\/$1')/d" $SERVICES_STORAGES/index.js
+sed -i "/\ \ storage_$1,/d" $SERVICES_STORAGES/index.js
+echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Delete' -a 'Storage' -t 'Logical link Deleted')
+
+
 
 echo $(print_message -i 'end' -m 'Service' -s "$1" -c 'Delete' -t 'Deletion completed')

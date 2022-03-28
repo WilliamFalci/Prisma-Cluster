@@ -28,6 +28,7 @@ if [ "$1" == 'add' ]; then
   controller_code="
     const path = require('path');
     \nrequire('dotenv').config({ path: path.resolve('$ENV_PATH', '.env') }); // SUPPORT .ENV FILES
+    \nconst { storage_$service } = require('$SERVICES_STORAGES/index.js')
     \nconst processCWD = process.cwd()
     \nprocess.chdir('$SERVICES_PATH/$service/model');
     \nconst { PrismaClient } = require('$SERVICES_PATH/$service/model/interface')
