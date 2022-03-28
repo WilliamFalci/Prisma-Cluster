@@ -58,6 +58,8 @@ All that just using the CLI, allowing you to focus on logical service architectu
 
 **Jayson** is the **RPC Compilant**, will be in listening on TCP Port (default: 3000) and will determinate the service's router, method and controler to invoke
 
+**Node-Filestorage** is the **Storage Engine**, will handle the storage, please read the documentation here: [petersirka/node-filestorage](https://github.com/petersirka/node-filestorage)
+
 <p align="center">Look at <a href="#locigal_architecture">Logical Architecture</a> to understand the pipeline</p>
 
 
@@ -191,6 +193,14 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 |  |  └─ [dd/mm/YYYY_hh_mm_ss].tar.gz
 |  ├─ services-deleted
 |  |  └─ [service_name]
+|  ├─ services-deleted
+|  |  ├─ buckets
+|  |  |  └─ [service-name] * n            (service storage bucket)
+|  |  |     ├─ OOO-000-NNN                (auto-gerated folder by storage system - look storage documentation to know more)
+|  |  |     |  ├─ OOO000NNN.data          (file added will be atuomatically saved with an incremental number - look storage documentation to know more)
+|  |  |     |  └─ config                  (auto-gerated folder by storage system - look storage documentation to know more)
+|  |  |     └─config                      (auto-gerated folder by storage system - look storage documentation to know more)
+|  |  └─ index.js
 |  ├─ .gitignore
 |  ├─ package.json
 |  └─ server_rpc.js
