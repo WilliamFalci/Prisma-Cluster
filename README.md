@@ -290,6 +290,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 
 #### DB > FETCH (ATTENTION ON USE IT):
 - This command will fetch the entire database generating Prisma model, the usage scenario is when you need import structure from an already exist DB (so previously you used DB > Import) and then you need generate the model's interface, if you use it outside this scenario be carefull on generate conflicts with migrations
+- Please read  <a href="#how-init-service-from-existing-schema">How init service from existing schema</a> to avoid conflicts on migration process
 
 ----------------------
 
@@ -367,3 +368,22 @@ In this way:
 - You will be able to fetch/pull/push from your own private repository
 - You will be able to modify the gitignore based on your necessity
 
+----------------------
+
+<a name="how-init-service-from-existing-schema"></a>
+## How init service from existing schema
+
+To understand this workflow we have to consider a scenario where you need make a service importing the relative tables from another DB. To help to understand I prepared an example.
+
+In this example I need make an service named: emailer
+- I will run: ```yarn rpc service create emailer```
+- After that I need import 7 tables from my old DB named "production" so I will generated 2 dumps, the first one just with tables structure, the second dump will contain just the data.
+- At this point I will place the first one (schema only) named ```01-Emailer.sql``` ```into /prisma-cluster/DB/import``` then I will run ```yarn rpc db import emailer 01-Emailer.sql```
+- This will go to generate the 7 tables into Emailer's service database, at this point I need generate the model's interface and sync prisma to the current status, to do that I will run ```yarn rpc db fetch emailer```, the CLI will alert you about ```Drift detected``` asking you to confirm the sync (this will normally delete all your data, but in our workflow we haven't data so is ok, confirm)
+- After the confirm the Service's Model, Schema and Migration are perfectly in sync, so now you can import your data, copy the second dump (data only) named ```02-Emailer_data.sql``` into ```/prisma-cluster/DB/import``` then run ```yarn rpc db import 02-Emailer_data.sql```
+-Enjoy
+
+If you want more information about this kind of possible troubleshooting look at [Prisma Development Troubleshooting](https://www.prisma.io/docs/guides/database/developing-with-prisma-migrate/troubleshooting-development)
+
+![Schermata del 2022-03-29 10-53-40](https://user-images.githubusercontent.com/36926081/160580832-4b94ff78-41c1-416d-a616-87d59c1d5d6f.png)
+![Schermata del 2022-03-29 10-54-54](https://user-images.githubusercontent.com/36926081/160580843-b8237c87-dd2f-4a7b-9e4b-8debe778056c.png)
