@@ -26,6 +26,8 @@ if [ -d "$SERVICES_PATH/$service" ]; then
   echo $(print_message -i 'continue' -m 'DB' -s "$service" -c 'Fetch' -a 'Prisma' -t 'Invoked to generate client interface')
   dotenv -e $ENV_PATH/.env -- npx prisma generate
   echo $(print_message -i 'continue' -m 'DB' -s "$service" -c 'Fetch' -a 'Prisma' -t 'Generation of client interface done')
+  dotenv -e $ENV_PATH/.env npx prisma migrate dev --name ${service}_introspected_change
+
   echo $(print_message -i 'end' -m 'DB' -s "$service" -c 'Fetch' -a 'Prisma' -t 'Service fetched')
 else
   echo $(print_message -e 'true' -i 'end' -m 'DB' -s "$service" -c 'Service' -a 'Folder' -t 'Not exist')
