@@ -10,12 +10,12 @@ else
 fi
 
 if [ -z "$1" ]; then
-  echo $(print_message -e 'true' -i 'end' -m 'Service' -s 'Argument #1' -c 'Invalid' -t 'Available: schema, create, migrate, delete, deploy, studio')
+  echo $(print_message -e 'true' -i 'end' -m 'Service' -s 'Argument #1' -c 'Invalid' -t 'Available: schema, create, migrate, delete, deploy, studio, connect')
   exit
 fi
 
-if ([ "$1" != "schema" ] && [ "$1" != "create" ]  && [ "$1" != "migrate" ]  && [ "$1" != "delete" ]  && [ "$1" != "deploy" ]   && [ "$1" != "studio" ] && [ "$1" != "method" ] ); then
-  echo $(print_message -e 'true' -i 'end' -m 'Service' -s 'Argument #1' -c 'Invalid' -t 'Available: method, schema, create, migrate, delete, deploy, studio')
+if ([ "$1" != "schema" ] && [ "$1" != "create" ]  && [ "$1" != "migrate" ]  && [ "$1" != "delete" ]  && [ "$1" != "deploy" ]   && [ "$1" != "studio" ] && [ "$1" != "method" ] && [ "$1" != "connect" ] ); then
+  echo $(print_message -e 'true' -i 'end' -m 'Service' -s 'Argument #1' -c 'Invalid' -t 'Available: method, schema, create, migrate, delete, deploy, studio, connect')
   exit
 fi
 
@@ -108,4 +108,13 @@ if [ $1 == "deploy" ]; then
     esac
   done
   exit
+fi
+
+if [ $1 == "connect" ]; then
+  if [ -z "$2" ]; then
+    echo $(print_message -e 'true' -i 'end' -m 'Service' -s 'Connect' -c 'Arguments' -a 'Invalid' -t 'Miss: [service name]')
+    exit;
+  fi
+  shift;
+  ./modules/services/commands/connect.sh $ENV_PATH $@
 fi
