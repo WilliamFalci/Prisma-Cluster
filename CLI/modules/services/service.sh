@@ -10,12 +10,12 @@ else
 fi
 
 if [ -z "$1" ]; then
-  echo $(print_message -e 'true' -i 'end' -m 'Service' -s 'Argument #1' -c 'Invalid' -t 'Available: schema, create, migrate, delete, deploy, studio, connect')
+  echo $(print_message -e 'true' -i 'end' -m 'Service' -s 'Argument #1' -c 'Invalid' -t 'Available: schema, create, migrate, delete, deploy, studio, connect, jobs')
   exit
 fi
 
-if ([ "$1" != "schema" ] && [ "$1" != "create" ]  && [ "$1" != "migrate" ]  && [ "$1" != "delete" ]  && [ "$1" != "deploy" ]   && [ "$1" != "studio" ] && [ "$1" != "method" ] && [ "$1" != "connect" ] ); then
-  echo $(print_message -e 'true' -i 'end' -m 'Service' -s 'Argument #1' -c 'Invalid' -t 'Available: method, schema, create, migrate, delete, deploy, studio, connect')
+if ([ "$1" != "schema" ] && [ "$1" != "create" ]  && [ "$1" != "migrate" ]  && [ "$1" != "delete" ]  && [ "$1" != "deploy" ]   && [ "$1" != "studio" ] && [ "$1" != "method" ] && [ "$1" != "connect" ] && [ "$1" != "jobs" ] ); then
+  echo $(print_message -e 'true' -i 'end' -m 'Service' -s 'Argument #1' -c 'Invalid' -t 'Available: method, schema, create, migrate, delete, deploy, studio, connect, jobs')
   exit
 fi
 
@@ -66,6 +66,16 @@ if [ $1 == "method" ]; then
   fi
   shift
   ./modules/services/commands/method.sh $ENV_PATH $@
+  exit
+fi
+
+if [ $1 == "jobs" ]; then
+  if [ -z "$2" ]; then
+    echo $(print_message -e 'true' -i 'end' -m 'Service' -s 'Jobs' -c 'Miss' -t 'Service Name')
+    exit;
+  fi
+  shift
+  ./modules/services/commands/jobs.sh $ENV_PATH $@
   exit
 fi
 

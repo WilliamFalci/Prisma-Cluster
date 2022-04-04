@@ -60,6 +60,8 @@ All that just using the CLI, allowing you to focus on logical service architectu
 
 **Node-Filestorage** is the **Storage Engine**, will handle the storage, please read the documentation here: [petersirka/node-filestorage](https://github.com/petersirka/node-filestorage)
 
+**Cron** is the **Cron Job Tool**, will handle the cron jobs, please read the documentation here: [kelektiv/node-cron](https://github.com/kelektiv/node-cron#readme)
+
 <p align="center">Look at <a href="#locigal_architecture">Logical Architecture</a> to understand the pipeline</p>
 
 
@@ -127,6 +129,12 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 ## Project Tree
 ```plaintext
 ┌ prisma-cluster
+├─ .github                                (Repository GIT Community Files)
+|  ├─ ISSUE_TEMPLATE
+|  |  ├─ bug_report.md
+|  |  └─ feature_request.md
+|  ├─ CODE_OF_CONDUCT.md
+|  └─ CONTRIBUTING.md
 ├─ CLI
 |  ├─ env
 |  |  ├─ .blank.env
@@ -144,11 +152,17 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 |  |  |  |  ├─ fetch.sh
 |  |  |  |  └─ import.sh
 |  |  |  └─ db.sh
+|  |  ├─ master_interface
+|  |  |  ├─ commands
+|  |  |  |  ├─ generate.sh
+|  |  |  |  └─ update.sh
+|  |  |  └─ master_interface.sh
 |  |  └─ services
 |  |     ├─ commands
 |  |     |  ├─ create.sh
 |  |     |  ├─ delete.sh
 |  |     |  ├─ deploy.sh
+|  |     |  ├─ jobs.sh
 |  |     |  ├─ method.sh
 |  |     |  ├─ migrate.sh
 |  |     |  └─ studio.sh
@@ -167,6 +181,10 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 |  |  ├─ env
 |  |  |  ├─ .blank.env.replication
 |  |  |  └─ .env                          (Not provided - copy blank.env.replication and replace the values)
+|  |  ├─ init
+|  |  |  ├─ 00-Create_repl_userl.sql      (SQL command to generate repl_user for the replication mode)         
+|  |  |  ├─ 01-Create_table_[table].sql   (File auto-generated when an subscription will be created, will contain che creation of the table schema)
+|  |  |  └─ 02-Create_sub_[table].sql     (File auto-generated when an subscription will be created, will contain che creation of subscription)
 |  |  ├─ scripts
 |  |  |  └─ subscriptions
 |  |  |     ├─ single-subscription.sh     (postgres make subscription script)
@@ -178,6 +196,20 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 |  ├─ docker-compose.yml
 |  └─ server.sh
 ├─ RPC  
+|  ├─ jobs                                (not provided - will be auto-generated from CLI in case you add an job to the service)
+|  |  ├─ services
+|  |  |  └─ [service-name] * n
+|  |  └─ index.js
+|  ├─ master                              (not provided - will be auto-generated from CLI under your command)
+|  |  ├─ model
+|  |  |  ├─ interface                     
+|  |  |  ├─ node_modules                  
+|  |  |  ├─ prisma                        
+|  |  |  ├─ .gitignore                    
+|  |  |  ├─ .package-lock.json            
+|  |  |  └─ .package.json                 
+|  |  └─ master_interface.js              (not provided - will be auto-generated from CLI during master's init)
+|  ├─ middleware                          (not provided - not handled by CLI - recommended to make it and place your custom middlewares / classes)
 |  ├─ node_modules                        (not provided - run yarn from RPC folder)
 |  ├─ services
 |  |  └─ [service-name] * n
@@ -185,15 +217,18 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 |  |     ├─ method                        (rpc server methods)
 |  |     ├─ model
 |  |     |  ├─ interface                  (rpc model interface)
+|  |     |  ├─ node_modules
 |  |     |  ├─ prisma
 |  |     |  |  └─ schema.prisma           (prisma rpc model generator and migration handler)
-|  |     |  └─ .gitignore
+|  |     |  ├─ .gitignore
+|  |     |  ├─ package-lock.json
+|  |     |  └─ package.json
 |  |     └─ routes                        (rpc server routing)
-|  ├─ services-backups
+|  ├─ services-backups                    (not provided - will be auto-generated from CLI if you will generate an backup)
 |  |  └─ [dd/mm/YYYY_hh_mm_ss].tar.gz
-|  ├─ services-deleted
+|  ├─ services-deleted                    (not provided - will be auto-generated from CLI if you will delete an service)
 |  |  └─ [service_name]
-|  ├─ services-deleted
+|  ├─ storage
 |  |  ├─ buckets
 |  |  |  └─ [service-name] * n            (service storage bucket)
 |  |  |     ├─ OOO-000-NNN                (auto-gerated folder by storage system - look storage documentation to know more)
@@ -201,10 +236,14 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 |  |  |     |  └─ config                  (auto-gerated folder by storage system - look storage documentation to know more)
 |  |  |     └─config                      (auto-gerated folder by storage system - look storage documentation to know more)
 |  |  └─ index.js
-|  ├─ .gitignore
+|  ├─ example.client.js
 |  ├─ package.json
-|  └─ server_rpc.js
+|  ├─ router.js
+|  ├─ server.js
+|  └─ yarn.lock
 ├─ .gitignore
+├─ CONTRIBUTING.md
+├─ LICENSE.md
 └─ README.md
 ```
 
@@ -216,6 +255,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 
 ### Available commands:
 - **SERVICE**
+- - **Connect**: ```yarn rpc service connect [service-name] [method-name]```
 - - **Create**: ```yarn rpc service create [service-name]```
 - - **Delete**: ```yarn rpc service delete [service-name]```
 - - **Method**: ```yarn rpc service method [service-name] [action: add/delete] [method-name]```
@@ -225,12 +265,24 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - - **Deploy**: ```yarn rpc service deploy [mode/service-name]```
 - - - Specific Service: ```yarn rpc service deploy [service-name]```
 - - - All Services: ```yarn rpc service deploy global```
+- - **Jobs**: ```yarn rpc service jobs [service-name] add [job-name] [optional: include_master]```
+- - - Whitout master interface injection: ```yarn rpc service jobs [service-name] add [job-name]```
+- - - Whit master interface injection: ```yarn rpc service jobs [service-name] add [job-name] include_master```
+- - **Studio**: ```yarn rpc service studio [service-name]```
 - **BACKUP**
 - - **Create**: ```yarn rpc backup create```
 - - **Rollback**: ```yarn rpc backup rollback [dd/mm/YYYY_hh_mm_ss]```
 - **DB**
 - - **Fetch**: ```yarn rpc db fetch [service-name]```
 - - **Import**: ```yarn rpc db import [service-name] [file-to-import.sql]```
+- **MASTER INTERFACE**
+- - **Generate**: ```yarn rpc master_interface generate```
+- - **Update**: ```yarn rpc master_interface update```
+
+#### SERVICE > CONNECT:
+- Will connect the master interface to the method
+- - This command must be runned ONLY if you use the db: Master - which contain data external of the service
+- - Before run this command you need generate the master_interface using the command: ```yarn rpc master_interface update```
 
 #### SERVICE > CREATE:
 - Will create the service running automatically this actions:
@@ -273,6 +325,12 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - Apply migrations to DB
 - Loop the ```./services-deleted``` to check if some services must be deleted
 
+#### SERVICE > JOBS
+- Will generate an service's cron jobs handler under: ```./RPC/Jobs/services/[service-name].js``` the execution will be handled by ```./RPC/Jobs/index.js``` automatically
+- - Use ```include_master``` only if you need connect the Job with the DB Master's Data
+- - The Job will be automatically connected with: Service's Interface, Service's Storage
+- THe logic part of cron job will be under his own key in ```./RPC/Jobs/services/[service-name].js```
+
 #### SERVICE > STUDIO
 - Will serve Prisma Studio for the target service on http://localhost:5555
 
@@ -286,11 +344,17 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - Will apply the backup you specifiend deleting all services and databases to re-apply them from the backup
 
 #### DB > IMPORT:
-- Will run the sql file to the service's db, the file must be located under `/database/import`
+- Will run the sql file to the service's db, the file must be located under `./DB/import`
 
 #### DB > FETCH (ATTENTION ON USE IT):
 - This command will fetch the entire database generating Prisma model, the usage scenario is when you need import structure from an already exist DB (so previously you used DB > Import) and then you need generate the model's interface, if you use it outside this scenario be carefull on generate conflicts with migrations
 - Please read  <a href="#how-init-service-from-existing-schema">How init service from existing schema</a> to avoid conflicts on migration process
+
+#### MASTER INTERFACE > GENERATE:
+- Will generate the interface of Master DB
+
+#### MASTER INTERFACE > UPDATE:
+- Will update the interface of Master DB
 
 ----------------------
 
@@ -371,6 +435,7 @@ In this way:
 ----------------------
 
 <a name="how-init-service-from-existing-schema"></a>
+
 ## How init service from existing schema
 
 To understand this workflow we have to consider a scenario where you need make a service importing the relative tables from another DB. To help to understand I prepared an example.
