@@ -9,10 +9,10 @@ else
   check="$2"
 fi
 
-if [ check == 'true' ] then
+if [ check == 'true' ]; then
   if grep -w "$1" ../tables; then
     echo '> Subscription already exist'
-    exit;
+    exit
   fi
 fi
 
