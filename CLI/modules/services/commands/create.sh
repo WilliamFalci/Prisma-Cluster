@@ -20,6 +20,11 @@ if [ ! -z "$2" ]; then
   create_credentials=$2
 fi
 
+only_master="false"
+if [ ! -z "$3" ]; then
+  only_master=$3
+fi
+
 echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -t 'Creation Started')
 
 rm -rf ${SERVICES_DELETED_PATH}/$1 || true
@@ -35,29 +40,31 @@ echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Folder' 
 mkdir -p $SERVICES_PATH/$1/methods
 echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Folder' -t 'Methods folder created: ./services/'"$1"'/methods')
 
-mkdir -p $SERVICES_PATH/$1/model
-echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Folder' -t 'Model folder created: ./services/'"$1"'/model')
-
+if [ "$only_master" == "false" ]; then
+  mkdir -p $SERVICES_PATH/$1/model
+  echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Folder' -t 'Model folder created: ./services/'"$1"'/model')
+fi 
 router_code="
   \nmodule.exports = (args,callback) => {
   \n}
 "
-
 echo -e $router_code > $SERVICES_PATH/$1/router.js
 
-cd $SERVICES_PATH/$1/model
+if [ "$only_master" == "false" ]; then
+  cd $SERVICES_PATH/$1/model
 
-echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Prisma' -t 'Invoked to init model')
-npx prisma init
-echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Prisma' -t 'Configured')
+  echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Prisma' -t 'Invoked to init model')
+  npx prisma init
+  echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Prisma' -t 'Configured')
 
-rm ./.env
-sed -i "s/\DATABASE_URL/SERVICE_${1^^}_DB_URL/" ./prisma/schema.prisma
+  rm ./.env
+  sed -i "s/\DATABASE_URL/SERVICE_${1^^}_DB_URL/" ./prisma/schema.prisma
 
-sed -i "/provider = \"prisma-client-js\"/a\\
-\toutput   = \"../interface\"" ./prisma/schema.prisma
+  sed -i "/provider = \"prisma-client-js\"/a\\
+  \toutput   = \"../interface\"" ./prisma/schema.prisma
 
-echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Prisma' -t 'Pointed to the Database')
+  echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Prisma' -t 'Pointed to the Database')
+fi 
 
 if [ "$create_credentials" == "true" ]; then
   service_user=$(openssl rand -base64 29 | tr -d "=+/0123456789" | cut -c1-25 | tr '[:upper:]' '[:lower:]') 

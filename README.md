@@ -259,14 +259,14 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - - **Connect**: ```yarn rpc service connect [service-name] [method-name]```
 - - **Create**: ```yarn rpc service create [service-name]```
 - - **Delete**: ```yarn rpc service delete [service-name]```
-- - **Method**: ```yarn rpc service method [service-name] [action: add/delete] [method-name]```
+- - **Method**: ```yarn rpc service method [service-name] [action: add/delete] [method-name] [(optional): master_only]```
 - - **Migrate**: ```yarn rpc service migrate [mode/service-name]```
 - - - Specific Service: ```yarn rpc service migrate [service-name]```
 - - - All Services: ```yarn rpc service migrate global```
 - - **Deploy**: ```yarn rpc service deploy [mode/service-name]```
 - - - Specific Service: ```yarn rpc service deploy [service-name]```
 - - - All Services: ```yarn rpc service deploy global```
-- - **Jobs**: ```yarn rpc service jobs [service-name] add [job-name] [optional: include_master]```
+- - **Jobs**: ```yarn rpc service jobs [service-name] add [job-name] [(optional): include_master]```
 - - - Whitout master interface injection: ```yarn rpc service jobs [service-name] add [job-name]```
 - - - Whit master interface injection: ```yarn rpc service jobs [service-name] add [job-name] include_master```
 - - **Studio**: ```yarn rpc service studio [service-name]```
@@ -306,8 +306,9 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - - Physically deletion of Service's stored files (optional)
 
 #### SERVICE > METHOD:
+- The usage of "master_only" option will work only if you already generated the master_interface, the CLI will generate the Service's Method and Controller without create an specific Database, Credentials and DB Interface, this kind of service must be used if you need create a Service using only the data of Master DB (so you are running this project in replication mode), anyway will be created always and specific Service's Storage.
 - ADD:
-- - Will create the method of the service running automatically this actions:
+- - Whitout "master_only" option will create the method of the service running automatically this actions:
 - - - Creation of [method-name] controller under ```./services/[service-name]/controllers/[method-name]_controller.js```
 - - - Creation of [method-name] method under ```./services/[service-name]/methods/[method-name]_method.js```
 - - - Injection of [method-name] into [service-name]'s router
