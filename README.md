@@ -77,6 +77,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - [x] Service Creation
 - [x] Service Removal
 - [x] Service Storage
+- [x] Service Jobs
 - [x] Service Local Migration
 - [x] Service Dev/Prod Deploy
 - [x] Backup System
