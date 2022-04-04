@@ -257,7 +257,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 ### Available commands:
 - **SERVICE**
 - - **Connect**: ```yarn rpc service connect [service-name] [method-name]```
-- - **Create**: ```yarn rpc service create [service-name]```
+- - **Create**: ```yarn rpc service create [service-name] [(optional in regular_mode, in only_master mode is mandatory with value: false, default = true) create_credentials: [true/false]] [(optional, default = false) only_master: [true/false]]```
 - - **Delete**: ```yarn rpc service delete [service-name]```
 - - **Method**: ```yarn rpc service method [service-name] [action: add/delete] [method-name] [(optional): master_only]```
 - - **Migrate**: ```yarn rpc service migrate [mode/service-name]```
@@ -286,12 +286,13 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - - Before run this command you need generate the master_interface using the command: ```yarn rpc master_interface update```
 
 #### SERVICE > CREATE:
+- In case of only master interface you have to run: ```yarn rpc service create [service-name] false true```
 - Will create the service running automatically this actions:
 - - Service Folder Structure under ```./services/[service-name]```
 - - RPC Router injection in ```[root]/router.js```
-- - Creation of [service-name] db into Postgress
-- - Creation of user's db (ower of [service-name] db)
-- - Saving of enviroment variables to link prisma to db created
+- - Creation of [service-name] db into Postgress (skipped whith create_credentials setted to false) 
+- - Creation of user's db (ower of [service-name] db) (skipped whith create_credentials setted to false) 
+- - Saving of enviroment variables to link prisma to db created (skipped whith create_credentials setted to false) 
 - - Creation of the specific Storage Bucket
 
 #### SERVICE > DELETE:
