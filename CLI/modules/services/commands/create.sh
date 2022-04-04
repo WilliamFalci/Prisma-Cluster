@@ -91,12 +91,11 @@ if [ "$create_credentials" == "true" ]; then
   echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Docker' -t "$(docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -d $1 -c "ALTER DEFAULT PRIVILEGES FOR USER $service_user IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO $service_user;")")
 
   echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Credentials' -t 'Service'"'"'s db user: '"$service_user"' have now access to '"$1"''"'"'s DB')
-
-  echo -e "const storage_$1 = require('filestorage').create(\`\${__dirname}/buckets/$1\`)\n$(cat $SERVICES_STORAGES/index.js)" > $SERVICES_STORAGES/index.js
-  sed -i "/^module.exports = {/a\ \ storage_$1," $SERVICES_STORAGES/index.js
-
-  echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Storage' -t 'Created')
 fi
+
+echo -e "const storage_$1 = require('filestorage').create(\`\${__dirname}/buckets/$1\`)\n$(cat $SERVICES_STORAGES/index.js)" > $SERVICES_STORAGES/index.js
+sed -i "/^module.exports = {/a\ \ storage_$1," $SERVICES_STORAGES/index.js
+echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Storage' -t 'Created')
 
 
 sed -i "/^\/\/ DO NOT ALTER OR DELETE THIS LINE - IMPORT SERVICES METHODS/a \const $1 = require('./services/$1/router.js');" $PROJECT_PATH/RPC/router.js
