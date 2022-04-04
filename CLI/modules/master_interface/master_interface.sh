@@ -14,7 +14,7 @@ if [ -z "$1" ]; then
   exit
 fi
 
-if ([ "$1" != "generate" ] && [ "$1" != "update" ] ] ); then
+if ([ "$1" != "generate" ] && [ "$1" != "update" ] ); then
   echo $(print_message -e 'true' -i 'end' -m 'Master Interface' -s 'Argument #1' -c 'Invalid' -t 'Available: generate, update')
   exit
 fi
