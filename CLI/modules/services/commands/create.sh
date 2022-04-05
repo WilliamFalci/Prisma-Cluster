@@ -44,8 +44,9 @@ if [ "$only_master" == "false" ]; then
   mkdir -p $SERVICES_PATH/$1/model
   echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Folder' -t 'Model folder created: ./services/'"$1"'/model')
 fi 
+
 router_code="
-  \nmodule.exports = (args,callback) => {
+  \nmodule.exports = {
   \n}
 "
 echo -e $router_code > $SERVICES_PATH/$1/router.js
