@@ -20,6 +20,10 @@
    <a href="#replication">Replication</a>
    ・
    <a href="#howtoclone">How to clone for dev/prod</a>
+   ・
+   <a href="#how-init-service-from-existing-schema">How init service from existing schema</a>
+   ・
+   <a href="#replicationchanges">What about if in replication mode the Parent DB change some columns?</a>
 </p>
 
 Created with: <p align="center">[![Generic badge](https://img.shields.io/badge/prisma-3.10.0-blue.svg)](https://www.prisma.io/) [![Generic badge](https://img.shields.io/badge/yarn-1.22.10-cyan.svg)](https://yarnpkg.com/) [![Generic badge](https://img.shields.io/badge/npx-8.5.1-red.svg)](https://www.npmjs.com/package/npx) [![Generic badge](https://img.shields.io/badge/node-16.0.0-green.svg)](https://nodejs.org/it) [![Generic badge](https://img.shields.io/badge/dotenvcli-5.0.0-magenta.svg)](https://www.npmjs.com/package/dotenv-cli) [![Generic badge](https://img.shields.io/badge/docker-20.10.12-blue.svg)](https://www.docker.com/) [![Generic badge](https://img.shields.io/badge/dockercompose-2.3.3-blue.svg)](https://docs.docker.com/compose/) [![Generic badge](https://img.shields.io/badge/jayson-3.6.6-blue.svg)](https://github.com/tedeh/jayson)</p>
@@ -455,3 +459,27 @@ If you want more information about this kind of possible troubleshooting look at
 
 ![Schermata del 2022-03-29 10-53-40](https://user-images.githubusercontent.com/36926081/160580832-4b94ff78-41c1-416d-a616-87d59c1d5d6f.png)
 ![Schermata del 2022-03-29 10-54-54](https://user-images.githubusercontent.com/36926081/160580843-b8237c87-dd2f-4a7b-9e4b-8debe778056c.png)
+
+----------------------
+
+<a name="replicationchanges"></a>
+
+## What about if in replication mode the Parent DB change some columns?
+
+Imagine you have the table users in both servers Parent Server and Slave Server, the slave is obviously the DB of this project, and you are running it in replication mode.
+
+You already made the publication on Parent Server and the subscription on the Slave, so you have already received the data, but... for some reason you need change the data type of an Column on the Parent DB, plus you add another column and drop another one, always on the Parent Server.
+
+What will happen?
+
+The Slave DB will not be more able to apply the data for those columns, why? The logical replication is just a data replication, not structural this mean you have to handle those changes.
+
+How handle those changes?
+
+So... if you want do it manually you can do it, else... I made this little tool in node: [node-pg-compare](https://github.com/WilliamFalci/node-pg-compare)
+
+Following the "How to use" of Node-Pg-Compare you will get the SQL File to apply ont Prisma-Cluster, to apply it follow those steps:
+
+- Copy the SQL File generated with node-pg-compare to ```./DB/import/```
+- Run the following command ```yarn rpc db import master [sql-filename].sql```
+- Enjoy
