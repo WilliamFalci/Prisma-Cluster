@@ -46,7 +46,7 @@ if [ "$1" == 'add' ]; then
     "
   fi
 
-  if [ "$only_master"=="master_only" ]; then
+  if [ "$only_master" == "master_only" ]; then
     controller_code="
       const path = require('path');
       \nrequire('dotenv').config({ path: path.resolve('$ENV_PATH', '.env') }); // SUPPORT .ENV FILES
