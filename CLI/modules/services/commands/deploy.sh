@@ -33,9 +33,9 @@ if [ $1 == "global" ]; then
 
       service_user=$(openssl rand -base64 29 | tr -d "=+/0123456789" | cut -c1-25 | tr '[:upper:]' '[:lower:]') 
       service_password=$(openssl rand -hex 20);
-      envUser="SERVICE_${1^^}_DB_USER=$service_user"
-      envPassword="SERVICE_${1^^}_DB_PASSWORD=$service_password"
-      dbConnection="SERVICE_${1^^}_DB_URL=postgresql://$service_user:$service_password@localhost:$POSTGRES_PORT/$service?schema=public"
+      envUser="SERVICE_${service^^}_DB_USER=$service_user"
+      envPassword="SERVICE_${service^^}_DB_PASSWORD=$service_password"
+      dbConnection="SERVICE_${service1^^}_DB_URL=postgresql://$service_user:$service_password@localhost:$POSTGRES_PORT/$service?schema=public"
 
       printf "\n\n$envUser" >> $ENV_PATH/.env
       printf "\n$envPassword" >> $ENV_PATH/.env

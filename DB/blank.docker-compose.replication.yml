@@ -28,6 +28,6 @@ services:
 
 configs:
   pg_hba:
-    file: ./config/postgres/pg_hba.conf
+    file: ./replication/config/pg_hba.conf
   postgresql:
-    file: ./config/postgres/postgresql.conf
+    file: ./replication/config/postgresql.conf
