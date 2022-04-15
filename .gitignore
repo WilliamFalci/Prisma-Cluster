@@ -2,6 +2,7 @@
 node_modules
 yarn.lock
 yarn-error.log
+package-lock.json
 
 # CLI
 CLI/env/.env
@@ -18,4 +19,13 @@ DB/replication/init/*
 docker-compose.replication.yml
 
 # SERVICES
-services-backups/*
+RPC/services-backups/*
+
+# STORAGE
+RPC/storage/buckets/*
+
+# MASTER INTERFACE
+RPC/master
+
+# PRISMA MODELS
+RPC/services/**/model/interface
