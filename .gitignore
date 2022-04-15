@@ -13,7 +13,7 @@ pg_hba.conf
 postgresql.conf
 .env.replication
 DB/replication/env/.env
-DB/replication/init/*
+#DB/replication/init/*
 
 # DOCKER COMPOSE
 docker-compose.replication.yml
