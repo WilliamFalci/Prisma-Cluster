@@ -33,17 +33,17 @@ if [ "$1" == 'add' ]; then
       master_mode=''
     else
       if [ "$3" == 'include_master' ]; then
-        master_mode="\nconst { master_interface } = require(env('MASTER_PATH') + '/master_interface.js')"
+        master_mode="\nconst { master_interface } = require(process.env.MASTER_PATH + '/master_interface.js')"
       fi
     fi
 
     job_code="
       const path = require('path');
-      \nrequire('dotenv').config({ path: path.resolve(env('ENV_PATH'), '.env') }); // SUPPORT .ENV FILES
-      \nconst { storage_$service } = require(env('SERVICES_STORAGES') + 'index.js')
+      \nrequire('dotenv').config({ path: path.resolve(process.env.ENV_PATH, '.env') }); // SUPPORT .ENV FILES
+      \nconst { storage_$service } = require(process.env.SERVICES_STORAGES + 'index.js')
       \nconst processCWD = process.cwd()
-      \nprocess.chdir(env('SERVICES_PATH') + '/$service/model');
-      \nconst { PrismaClient } = require(env('SERVICES_PATH') + '/$service/model/interface')
+      \nprocess.chdir(process.env.SERVICES_PATH + '/$service/model');
+      \nconst { PrismaClient } = require(process.env.SERVICES_PATH + '/$service/model/interface')
       \nconst interface = new PrismaClient()
       \nprocess.chdir(processCWD)
       ${master_mode}
