@@ -61,7 +61,8 @@ if [ "$1" == 'add' ]; then
   sed -i "/^module.exports = {/a\ \ $job_name: new CronJob('* * * * * *', () => {console.log('emailerJobs > ${job_name} > is Running!');}, null, true, TZ)," $JOBS_PATH/services/$service.js
 
   if [ ! -f "$JOBS_PATH/index.js" ]; then
-    echo -e '' > $JOBS_PATH/index.js
+    echo -e "const path = require('path')
+            \nconst dotenv = require('dotenv').config({ path: path.resolve(__dirname, `../../CLI/env/.env`) })" > $JOBS_PATH/index.js
   fi
 
   if grep -w "${service}Jobs" $JOBS_PATH/index.js; then
