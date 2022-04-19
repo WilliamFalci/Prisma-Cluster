@@ -23,6 +23,11 @@ if [ $1 == "global" ]; then
   cd $SERVICES_PATH
   for d in */ ; do
     service=${d/"/"/""}
+
+    if [ ! -d "$SERVICES_PATH/$service/model" ]; then
+       continue
+    fi
+
     cd $SERVICES_PATH/$service/model
     echo $(print_message -i 'continue' -m 'Service' -s 'Deploy' -c "$service" -a 'DB' -t 'Checking if exist')
 
