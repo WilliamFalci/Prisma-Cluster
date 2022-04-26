@@ -447,6 +447,8 @@ In this way:
 
 <a name="how-init-service-from-0"></a>
 
+## How init service from 0
+
 - Before everything we must create the service running ```yarn rpc service create [service-name]```
 - At this point the CLI created the service folder's structure + the blank DB on postgres + the DB's credentials on enviroment, but not the interface, why? Because the DB is empty
 - We must "init" our DB with at least 1 table to generate the interface, running ```yarn rpc service schema [service-name]``` the service's schema will be opened
@@ -478,6 +480,8 @@ If you want more information about this kind of possible troubleshooting look at
 ----------------------
 
 <a name="how-re-init-a-service"></a>
+
+## How re-init a service
 
 Damn! I wrong something and I need re-init the service excluding it from "services-deleted" how I cand do it?
 
