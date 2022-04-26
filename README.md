@@ -1,3 +1,4 @@
+<a name="top"></a>
 # <p align="center">PRISMA CLUSTER</p>
 ##### <p align="center">Created with love from Italy :green_heart::white_heart::heart:</p>
 <p align="center">
@@ -8,7 +9,7 @@
    <a href="#features">Features</a>
    ・
    <a href="#global_requirements">Global Requirements</a>
-   ・
+   ・<a name="disclaimer"></a>
    <a href="#locigal_architecture">Logical Architecture</a>
    ・
    <a href="#workflow">Prdocution Workflow</a>
@@ -46,7 +47,7 @@ The Repository will be updated everytime it's needed, the same project is releas
 
 <a name="what_is"></a>
 
-## What is Prisma Cluster?
+## What is Prisma Cluster? <a href="#top">(Back to Top)</a>
 
 Prisma Cluster is an **Full Stack Service Manager**, using the Next-Generation ORM [Prisma](https://github.com/prisma/prisma) and the Powerfull of [Jayson RPC](https://github.com/tedeh/jayson) + Dockerized Postgres, Prisma Cluster allow you to create an cluster of Databases with: 
 
@@ -81,7 +82,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 
 <a name="features"></a>
 
-## Features
+## Features <a href="#top">(Back to Top)</a>
 - [x] Service Creation
 - [x] Service Removal
 - [x] Service Storage
@@ -102,7 +103,8 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - [ ] Write documentation on "Quick Start"
 
 <a name="global_requirements"></a>
-## Global Requirements
+
+## Global Requirements <a href="#top">(Back to Top)</a>
 - Node
 - Docker
 - Docker-Compose
@@ -110,12 +112,15 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - Dotenv-cli: `yarn global add dotenv-cli`
 
 <a name="locigal_architecture"></a>
-## Logical Architecture
+
+## Logical Architecture <a href="#top">(Back to Top)</a>
+
 <p align="center">Simple example of this project architecture with 2 services</p>
 <img src="https://user-images.githubusercontent.com/36926081/157291288-3b59caa9-5b69-4c3e-b53e-f9bb39d6efd4.png">
 
 <a name="workflow"></a>
-## Workflow
+
+## Workflow <a href="#top">(Back to Top)</a>
 
 ```plaintext
 ┌─ Local Workflow
@@ -135,7 +140,8 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
                    └─> run the global deploy (to apply all migrations changes) using Prisma Cluster CLI   
 ```
 <a name="project_tree"></a>
-## Project Tree
+
+## Project Tree <a href="#top">(Back to Top)</a>
 ```plaintext
 ┌ prisma-cluster
 ├─ .github                                (Repository GIT Community Files)
@@ -257,12 +263,13 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 ```
 
 <a name="cli"></a>
-## PRISMA CLUSTER CLI
+
+## PRISMA CLUSTER CLI <a href="#top">(Back to Top)</a>
 
 - Locate `prisma-cluster/CLI`
 - From the folder run `yarn rpc [commands]`
 
-### Available commands:
+### Available commands: <a href="#top">(Back to Top)</a>
 - **SERVICE**
 - - **Connect**: ```yarn rpc service connect [service-name] [method-name]```
 - - **Create**: ```yarn rpc service create [service-name] [(optional in regular_mode, in only_master mode is mandatory with value: false, default = true) create_credentials: [true/false]] [(optional, default = false) only_master: [true/false]]```
@@ -288,12 +295,12 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - - **Generate**: ```yarn rpc master_interface generate```
 - - **Update**: ```yarn rpc master_interface update```
 
-#### SERVICE > CONNECT:
+#### SERVICE > CONNECT: <a href="#top">(Back to Top)</a>
 - Will connect the master interface to the method
 - - This command must be runned ONLY if you use the db: Master - which contain data external of the service
 - - Before run this command you need generate the master_interface using the command: ```yarn rpc master_interface update```
 
-#### SERVICE > CREATE:
+#### SERVICE > CREATE: <a href="#top">(Back to Top)</a>
 - In case of only master interface you have to run: ```yarn rpc service create [service-name] false true```
 - Will create the service running automatically this actions:
 - - Service Folder Structure under ```./services/[service-name]```
@@ -303,7 +310,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - - Saving of enviroment variables to link prisma to db created (skipped whith create_credentials setted to false) 
 - - Creation of the specific Storage Bucket
 
-#### SERVICE > DELETE:
+#### SERVICE > DELETE: <a href="#top">(Back to Top)</a>
 - Will delete the service running automatically this actions:
 - - Deletion of ```./services/[service-name]```
 - - Deletion of [service-name] DB
@@ -314,7 +321,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - - Deletion of Storage logical link
 - - Physically deletion of Service's stored files (optional)
 
-#### SERVICE > METHOD:
+#### SERVICE > METHOD: <a href="#top">(Back to Top)</a>
 - The usage of "master_only" option will work only if you already generated the master_interface, the CLI will generate the Service's Method and Controller without create an specific Database, Credentials and DB Interface, this kind of service must be used if you need create a Service using only the data of Master DB (so you are running this project in replication mode), anyway will be created always and specific Service's Storage.
 - ADD:
 - - Whitout "master_only" option will create the method of the service running automatically this actions:
@@ -328,49 +335,50 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - - - Deletion of [method-name] method under ```./services/[service-name]/methods/[method-name]_method.js```
 - - - Deletion of injection into [service-name]'s router
 - - - Auto configuration of [method-name] controller with [service-name]'s model interface into ```[method-name]_controller.js```
-#### SERVICE > MIGRATE:
+#### SERVICE > MIGRATE: <a href="#top">(Back to Top)</a>
 - Apply schema changes to DB
 - Make migration file
 
-#### SERVICE > DEPLOY (MUST BE RUNNED ONLY ON DEV / PRODUCTION)
+#### SERVICE > DEPLOY (MUST BE RUNNED ONLY ON DEV / PRODUCTION) <a href="#top">(Back to Top)</a>
 - Apply migrations to DB
 - Loop the ```./services-deleted``` to check if some services must be deleted
 
-#### SERVICE > JOBS
+#### SERVICE > JOBS <a href="#top">(Back to Top)</a>
 - Will generate an service's cron jobs handler under: ```./RPC/Jobs/services/[service-name].js``` the execution will be handled by ```./RPC/Jobs/index.js``` automatically
 - - Use ```include_master``` only if you need connect the Job with the DB Master's Data
 - - The Job will be automatically connected with: Service's Interface, Service's Storage
 - THe logic part of cron job will be under his own key in ```./RPC/Jobs/services/[service-name].js```
 
-#### SERVICE > STUDIO
+#### SERVICE > STUDIO <a href="#top">(Back to Top)</a>
 - Will serve Prisma Studio for the target service on http://localhost:5555
 
-#### BACKUP > CREATE:
+#### BACKUP > CREATE: <a href="#top">(Back to Top)</a>
 - Will create a full dump of all DBs (Schema and Data
 - Will create a Bk of current enviroment variables
 - Will create a Bk of all current services controllers and routes
 - Will zip the all previous points
 
-#### BACKUP > ROLLBACK (ATTENTION ON USE IT):
+#### BACKUP > ROLLBACK (ATTENTION ON USE IT): <a href="#top">(Back to Top)</a>
 - Will apply the backup you specifiend deleting all services and databases to re-apply them from the backup
 
-#### DB > IMPORT:
+#### DB > IMPORT: <a href="#top">(Back to Top)</a>
 - Will run the sql file to the service's db, the file must be located under `./DB/import`
 
-#### DB > FETCH (ATTENTION ON USE IT):
+#### DB > FETCH (ATTENTION ON USE IT): <a href="#top">(Back to Top)</a>
 - This command will fetch the entire database generating Prisma model, the usage scenario is when you need import structure from an already exist DB (so previously you used DB > Import) and then you need generate the model's interface, if you use it outside this scenario be carefull on generate conflicts with migrations
 - Please read  <a href="#how-init-service-from-existing-schema">How init service from existing schema</a> to avoid conflicts on migration process
 
-#### MASTER INTERFACE > GENERATE:
+#### MASTER INTERFACE > GENERATE: <a href="#top">(Back to Top)</a>
 - Will generate the interface of Master DB
 
-#### MASTER INTERFACE > UPDATE:
+#### MASTER INTERFACE > UPDATE: <a href="#top">(Back to Top)</a>
 - Will update the interface of Master DB
 
 ----------------------
 
 <a name="replication"></a>
-## POSTGRES REPLICATION SLAVE MODE
+
+## POSTGRES REPLICATION SLAVE MODE <a href="#top">(Back to Top)</a>
 
 ### Quick Start
 
@@ -428,7 +436,8 @@ What do this script? The script will add the table to ```tables``` to keep track
 ----------------------
 
 <a name="howtoclone"></a>
-## Use this project in real case of development/production
+
+## Use this project in real case of development/production <a href="#top">(Back to Top)</a>
 
 - Create your own empty private repository
 - Clone the project ```https://github.com/WilliamFalci/Prisma-Cluster.git```
@@ -447,7 +456,7 @@ In this way:
 
 <a name="how-init-service-from-0"></a>
 
-## How init service from 0
+## How init service from 0 <a href="#top">(Back to Top)</a>
 
 - Before everything we must create the service running ```yarn rpc service create [service-name]```
 - At this point the CLI created the service folder's structure + the blank DB on postgres + the DB's credentials on enviroment, but not the interface, why? Because the DB is empty
@@ -460,7 +469,7 @@ In this way:
 
 <a name="how-init-service-from-existing-schema"></a>
 
-## How init service from existing schema
+## How init service from existing schema <a href="#top">(Back to Top)</a>
 
 To understand this workflow we have to consider a scenario where you need make a service importing the relative tables from another DB. To help to understand I prepared an example.
 
@@ -481,7 +490,7 @@ If you want more information about this kind of possible troubleshooting look at
 
 <a name="how-re-init-a-service"></a>
 
-## How re-init a service
+## How re-init a service <a href="#top">(Back to Top)</a>
 
 Damn! I wrong something and I need re-init the service excluding it from "services-deleted" how I cand do it?
 
@@ -493,7 +502,7 @@ Then you will be free to re-create the service
 
 <a name="replicationchanges"></a>
 
-## What about if in replication mode the Parent DB change some columns?
+## What about if in replication mode the Parent DB change some columns? <a href="#top">(Back to Top)</a>
 
 Imagine you have the table users in both servers Parent Server and Slave Server, the slave is obviously the DB of this project, and you are running it in replication mode.
 
