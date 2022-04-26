@@ -23,6 +23,10 @@
    ・
    <a href="#how-init-service-from-existing-schema">How init service from existing schema</a>
    ・
+   <a href="#how-init-service-from-0">How init service from 0</a>
+   ・
+   <a href="#how-re-init-a-service">How re-init a service</a>
+   ・
    <a href="#replicationchanges">What about if in replication mode the Parent DB change some columns?</a>
 </p>
 
@@ -441,6 +445,17 @@ In this way:
 
 ----------------------
 
+<a name="how-init-service-from-0"></a>
+
+- Before everything we must create the service running ```yarn rpc service create [service-name]```
+- At this point the CLI created the service folder's structure + the blank DB on postgres + the DB's credentials on enviroment, but not the interface, why? Because the DB is empty
+- We must "init" our DB with at least 1 table to generate the interface, running ```yarn rpc service schema [service-name]``` the service's schema will be opened
+- Referer to [Prisma Schema](https://www.prisma.io/docs/concepts/components/prisma-schema) to create your tables
+- After this we have to generate our first migration running the command ```yarn rpc service migrate [service-name]```, this command will go to apply the changes of schema to DB, will generate the migration file and will create/update the interface
+- Now we can create our service's methods, running ```yarn rpc service method [service-name] add [method-name], this command will geneterate the method and relative controller already linked with the interface ect.
+
+----------------------
+
 <a name="how-init-service-from-existing-schema"></a>
 
 ## How init service from existing schema
@@ -459,6 +474,16 @@ If you want more information about this kind of possible troubleshooting look at
 
 ![Schermata del 2022-03-29 10-53-40](https://user-images.githubusercontent.com/36926081/160580832-4b94ff78-41c1-416d-a616-87d59c1d5d6f.png)
 ![Schermata del 2022-03-29 10-54-54](https://user-images.githubusercontent.com/36926081/160580843-b8237c87-dd2f-4a7b-9e4b-8debe778056c.png)
+
+----------------------
+
+<a name="how-re-init-a-service"></a>
+
+Damn! I wrong something and I need re-init the service excluding it from "services-deleted" how I cand do it?
+
+So.. if you haven't already runned the command ```yarn rpc service delete [service-name]``` do it, this command will delete all the relative enviroments variables of the service, will delete the relative DB, data, and storage, then will generate an file named with the service's name under the folder ```services-deleted``` if you want exclude this deletion from the deletion's tracking, you have just to delete the file.
+
+Then you will be free to re-create the service
 
 ----------------------
 
