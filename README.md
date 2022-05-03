@@ -71,6 +71,8 @@ All that just using the CLI, allowing you to focus on logical service architectu
 
 **Cron** is the **Cron Job Tool**, will handle the cron jobs, please read the documentation here: [kelektiv/node-cron](https://github.com/kelektiv/node-cron#readme)
 
+**Node-Cache** is a simple caching module [node-cache/node-cache](https://github.com/node-cache/node-cache)
+
 <p align="center">Look at <a href="#locigal_architecture">Logical Architecture</a> to understand the pipeline</p>
 
 
@@ -96,11 +98,9 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - [x] Postgress Replication pre-configured 
 - [x] RPC Server using Jayson
 - [x] RPC Client example using Jayson (look example.client.js)
-- [ ] Realtime Websocket server using Supabase/Realtime (secured by JWT)
-- [ ] Realtime Client example using Supabase/Realtime-js
-- [ ] Possibility to add/remove an entire service to realtime service or just specific tables
-- [ ] Possibility to set / alter RLS policies on service's tables 
-- [ ] Write documentation on "Quick Start"
+- [x] Node-Cache
+- [] WebSocket Handler Using fastify
+- [] Websocket Subscription to the wal logical of Postgress (Realtime) 
 
 <a name="global_requirements"></a>
 
@@ -463,7 +463,7 @@ In this way:
 - We must "init" our DB with at least 1 table to generate the interface, running ```yarn rpc service schema [service-name]``` the service's schema will be opened
 - Referer to [Prisma Schema](https://www.prisma.io/docs/concepts/components/prisma-schema) to create your tables
 - After this we have to generate our first migration running the command ```yarn rpc service migrate [service-name]```, this command will go to apply the changes of schema to DB, will generate the migration file and will create/update the interface
-- Now we can create our service's methods, running ```yarn rpc service method [service-name] add [method-name], this command will geneterate the method and relative controller already linked with the interface ect.
+- Now we can create our service's methods, running ```yarn rpc service method [service-name] add [method-name]```, this command will geneterate the method and relative controller already linked with the interface ect.
 
 ----------------------
 
