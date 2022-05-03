@@ -6,7 +6,10 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "jayson": "^3.6.6",
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "jayson": "^3.6.6"
+  },
+  "dependencies": {
+    "node-cache": "^5.1.2"
   }
 }
