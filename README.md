@@ -99,8 +99,8 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - [x] RPC Server using Jayson
 - [x] RPC Client example using Jayson (look example.client.js)
 - [x] Node-Cache
-- [] WebSocket Handler Using fastify
-- [] Websocket Subscription to the wal logical of Postgress (Realtime) 
+- [ ] WebSocket Handler Using fastify
+- [ ] Websocket Subscription to the wal logical of Postgress (Realtime) 
 
 <a name="global_requirements"></a>
 
