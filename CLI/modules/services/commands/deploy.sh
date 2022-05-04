@@ -40,7 +40,7 @@ if [ $1 == "global" ]; then
       service_password=$(openssl rand -hex 20);
       envUser="SERVICE_${service^^}_DB_USER=$service_user"
       envPassword="SERVICE_${service^^}_DB_PASSWORD=$service_password"
-      dbConnection="SERVICE_${service1^^}_DB_URL=postgresql://$service_user:$service_password@localhost:$POSTGRES_PORT/$service?schema=public"
+      dbConnection="SERVICE_${service^^}_DB_URL=postgresql://$service_user:$service_password@localhost:$POSTGRES_PORT/$service?schema=public"
 
       printf "\n\n$envUser" >> $ENV_PATH/.env
       printf "\n$envPassword" >> $ENV_PATH/.env
