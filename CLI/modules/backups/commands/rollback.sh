@@ -34,7 +34,7 @@ if [ -f "$SERVICES_BACKUP/$1.tar.gz" ]; then
   cat $SERVICES_BACKUP/$bk/db/dump_$bk.sql | docker exec -i "${DOCKER_CONTAINER}" psql -U ${POSTGRES_USER}
   echo $(print_message -i 'continue' -m 'Backup' -s "$bk" -c 'Rollback' -a 'Docker' -t 'Database restored')
   
-  subdircount=$(find /tmp/test -maxdepth 1 -type d | wc -l)
+  subdircount=$(find $SERVICES_PATH -maxdepth 1 -type d | wc -l)
 
   if [[ "$subdircount" -eq 1 ]]
   then
@@ -43,7 +43,6 @@ if [ -f "$SERVICES_BACKUP/$1.tar.gz" ]; then
     echo $(print_message -i 'continue' -m 'Services' -s 'Check' -c 'Found' -a 'True' -t 'Delete all services...')
     rm -r $SERVICES_PATH/*
     echo $(print_message -i 'continue' -m 'Backup' -s 'Check' -c 'Found' -a 'False' -t 'All services deleted')
-
   fi
   
   while read database; do
@@ -52,7 +51,18 @@ if [ -f "$SERVICES_BACKUP/$1.tar.gz" ]; then
       if [ ! -d "$SERVICES_PATH/$service" ]; then
         echo $(print_message -i 'continue' -m 'Backup' -s "$bk" -c 'Service' -a "$service" -t 'Re-create service folder')
         $CLI_PATH/modules/services/commands/create.sh $ENV_PATH $service false
+
+        cp -r $SERVICES_BACKUP/$bk/services/$service/controllers/* $SERVICES_PATH/$service/controllers
+        echo $(print_message -i 'continue' -m 'Backup' -s "$bk" -c "$service" -a 'Controllers' -t 'Restored')
+        cp -r $SERVICES_BACKUP/$bk/services/$service/methods/* $SERVICES_PATH/$service/methods
+        echo $(print_message -i 'continue' -m 'Backup' -s "$bk" -c "$service" -a 'Methods' -t 'Restored')
+        cp $SERVICES_BACKUP/$bk/services/$service/router.js $SERVICES_PATH/$service/router.js
+        echo $(print_message -i 'continue' -m 'Backup' -s "$bk" -c "$service" -a 'Router' -t 'Restored')
+        cp $SERVICES_BACKUP/$bk/services/$service/migrations/* $SERVICES_PATH/$service/model/prisma/migrations
+        echo $(print_message -i 'continue' -m 'Backup' -s "$bk" -c "$service" -a 'Migrations' -t 'Restored')
+
         echo $(print_message -i 'continue' -m 'Backup' -s "$bk" -c 'Service' -a "$service" -t 'Folder restored')
+
         cd $SERVICES_PATH/$service/model
         echo $(print_message -i 'continue' -m 'Backup' -s "$bk" -c "$service" -a 'Prisma' -t 'Invoked to introspect service')
         dotenv -e $ENV_PATH/.env -- npx prisma db pull
@@ -64,15 +74,6 @@ if [ -f "$SERVICES_BACKUP/$1.tar.gz" ]; then
     fi
   done < <(docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -c "SELECT datname FROM pg_database WHERE datname <> 'postgres' AND datname <> 'master' AND datistemplate = false;" 2>&1)
 
-  for d in $SERVICES_BACKUP/$bk/services/* ; do
-    service=$(basename $d)
-    cp -r $SERVICES_BACKUP/$bk/services/$service/controllers/* $SERVICES_PATH/$service/controllers
-    echo $(print_message -i 'continue' -m 'Backup' -s "$bk" -c "$service" -a 'Controllers' -t 'Restored')
-    cp -r $SERVICES_BACKUP/$bk/services/$service/methods/* $SERVICES_PATH/$service/methods
-    echo $(print_message -i 'continue' -m 'Backup' -s "$bk" -c "$service" -a 'Methods' -t 'Restored')
-    cp $SERVICES_BACKUP/$bk/services/$service/router.js $SERVICES_PATH/$service/router.js
-    echo $(print_message -i 'continue' -m 'Backup' -s "$bk" -c "$service" -a 'Router' -t 'Restored')
-  done
   rm -r $SERVICES_BACKUP/$bk
   echo $(print_message -i 'end' -m 'Backup' -s "$bk" -c 'Rollback' -a 'Global' -t 'Cluster restored to: '"$bk"'')
 else
