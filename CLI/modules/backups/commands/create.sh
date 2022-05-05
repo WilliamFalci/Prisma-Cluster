@@ -32,6 +32,8 @@ for d in $SERVICES_PATH/* ; do
   mkdir -p "$SERVICES_BACKUP/$currentDate/services/$service"
   cp -r $SERVICES_PATH/$service/controllers $SERVICES_BACKUP/$currentDate/services/$service/controllers
   cp -r $SERVICES_PATH/$service/methods $SERVICES_BACKUP/$currentDate/services/$service/methods
+  cp -r $SERVICES_PATH/$service/model/prisma/migrations $SERVICES_BACKUP/$currentDate/services/$service/migrations
+  
   cp $SERVICES_PATH/$service/router.js $SERVICES_BACKUP/$currentDate/services/$service/router.js
   echo $(print_message -i 'continue' -m 'Backup' -s "$service" -a 'Backup' -t 'Done')
 done
