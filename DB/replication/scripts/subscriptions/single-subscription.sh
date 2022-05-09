@@ -19,11 +19,11 @@ fi
 
 docker exec -it ${DOCKER_CONTAINER} pg_dump -U $POSTGRES_USER -d master --no-privileges --no-owner -t $1 -s > ../../init/02-Create_table_$1.sql
 
-echo "CREATE SUBSCRIPTION $1_sub_$DEVICE_NAME CONNECTION 'dbname=${PARENT_REPLICATION_DB} host=master_node user=${PARENT_REPLICATION_USER} password=${PARENT_REPLICATION_PASSWORD}' PUBLICATION $1_pub_$DEVICE_NAME" > ../../init/03-Create_sub_$1.sql
-echo "> SQL: sub_$1 -> created"
+echo "CREATE SUBSCRIPTION $1_sub_$DEVICE_NAME CONNECTION 'dbname=${PARENT_REPLICATION_DB} host=master_node user=${PARENT_REPLICATION_USER} password=${PARENT_REPLICATION_PASSWORD}' PUBLICATION $1_pub" > ../../init/03-Create_sub_$1.sql
+echo "> SQL: sub_$1_$DEVICE_NAME -> created"
 
 if [ "$(docker container inspect $DOCKER_CONTAINER -f '{{.State.Running}}')" == "true" ]; then
-  docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -c "CREATE SUBSCRIPTION $1_sub_$DEVICE_NAME CONNECTION 'dbname=${PARENT_REPLICATION_DB} host=master_node user=${PARENT_REPLICATION_USER} password=${PARENT_REPLICATION_PASSWORD}' PUBLICATION $1_pub_$DEVICE_NAME";
+  docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -c "CREATE SUBSCRIPTION $1_sub_$DEVICE_NAME CONNECTION 'dbname=${PARENT_REPLICATION_DB} host=master_node user=${PARENT_REPLICATION_USER} password=${PARENT_REPLICATION_PASSWORD}' PUBLICATION $1_pub";
 else
   echo "> Docker: $DOCKER_CONTAINER is offline skipping"
 fi
