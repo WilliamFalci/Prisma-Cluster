@@ -13,6 +13,7 @@ pg_hba.conf
 postgresql.conf
 .env.replication
 DB/replication/env/.env
+01-Create_repl_user.sql
 #DB/replication/init/*
 
 # DOCKER COMPOSE
