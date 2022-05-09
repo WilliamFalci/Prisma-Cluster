@@ -43,6 +43,9 @@ This project have the goal to make more "simple" make an Microservice infrastruc
 
 The Repository will be updated everytime it's needed, the same project is released with Open Source License, The usage and configuration is your business.
 
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWilliamFalci%2FPrisma-Cluster.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FWilliamFalci%2FPrisma-Cluster?ref=badge_large)
+
 ----------------------
 
 <a name="what_is"></a>
