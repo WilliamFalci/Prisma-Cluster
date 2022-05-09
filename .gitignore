@@ -13,7 +13,7 @@ pg_hba.conf
 postgresql.conf
 .env.replication
 DB/replication/env/.env
-01-Create_repl_user.
+01-Create_repl_user.sql
 03-Create_sub_*.sql
 #DB/replication/init/*
 
