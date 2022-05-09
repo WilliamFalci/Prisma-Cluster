@@ -19,7 +19,7 @@ fi
 
 docker exec -it ${DOCKER_CONTAINER} pg_dump -U $POSTGRES_USER -d master --no-privileges --no-owner -t $1 -s > ../../init/02-Create_table_$1.sql
 
-echo "CREATE SUBSCRIPTION $1_sub CONNECTION 'dbname=${PARENT_REPLICATION_DB} host=master_node user=${PARENT_REPLICATION_USER} password=${PARENT_REPLICATION_PASSWORD}' PUBLICATION $1_pub_$DEVICE_NAME" > ../../init/03-Create_sub_$1.sql
+echo "CREATE SUBSCRIPTION $1_sub_$DEVICE_NAME CONNECTION 'dbname=${PARENT_REPLICATION_DB} host=master_node user=${PARENT_REPLICATION_USER} password=${PARENT_REPLICATION_PASSWORD}' PUBLICATION $1_pub_$DEVICE_NAME" > ../../init/03-Create_sub_$1.sql
 echo "> SQL: sub_$1 -> created"
 
 if [ "$(docker container inspect $DOCKER_CONTAINER -f '{{.State.Running}}')" == "true" ]; then
