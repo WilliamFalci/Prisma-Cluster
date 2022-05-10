@@ -60,6 +60,7 @@ if [ $1 == "global" ]; then
     fi
     echo $(print_message -i 'continue' -m 'Service' -s 'Deploy' -c "$service" -a 'Prisma' -t 'Invoked to deploy')
     dotenv -e $ENV_PATH/.env -- npx prisma migrate deploy
+    dotenv -e $ENV_PATH/.env -- npx prisma generate
   done
 
   for f in $SERVICES_DELETED_PATH/* ; do
@@ -79,6 +80,7 @@ else
     
   echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Deploy' -t 'Started')
   dotenv -e $ENV_PATH/.env -- npx prisma migrate deploy
+  dotenv -e $ENV_PATH/.env -- npx prisma generate
   echo $(print_message -i 'end' -m 'Service' -s "$1" -c 'Deploy' -t 'Completed')
   exit
 fi
