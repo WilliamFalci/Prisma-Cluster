@@ -28,13 +28,17 @@ if [ -f "$DATA_EXPORT/$1.tar.gz" ]; then
     echo $(print_message -i 'continue' -m 'Restore Data' -s '$bk' -c 'Dump' -a 'Storage' -t 'Nothing to apply')
   else
     if [ -f "$DATA_EXPORT/$bk/global.txt" ]; then
-       rm -R $SERVICES_STORAGES/buckets
-       cp $DATA_EXPORT/$bk/data/buckets $SERVICES_STORAGES/buckets
-       echo $(print_message -i 'continue' -m 'Restore Data' -s '$bk' -c 'Dump' -a 'Storage' -t 'Files applied')
+        if [ -f "$SERVICES_STORAGES/buckets" ]; then
+          rm -R $SERVICES_STORAGES/buckets
+        fi
+        cp $DATA_EXPORT/$bk/data/buckets $SERVICES_STORAGES/buckets
+        echo $(print_message -i 'continue' -m 'Restore Data' -s '$bk' -c 'Dump' -a 'Storage' -t 'Files applied')
     else
       for d in $DATA_EXPORT/$bk/data/* ; do
         service=$(basename $d)
-        rm -R $SERVICES_STORAGES/buckets/$service
+        if [ -d "$SERVICES_STORAGES/buckets/$service" ]; then
+          rm -R $SERVICES_STORAGES/buckets/$service
+        fi
         cp $DATA_EXPORT/$bk/data/$service $SERVICES_STORAGES/buckets/$service
         echo $(print_message -i 'continue' -m 'Restore Data' -s '$bk' -c "$service dump" -a 'Storage' -t 'Files applied')
       done
