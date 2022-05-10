@@ -10,12 +10,12 @@ else
 fi
 
 if [ -z "$1" ]; then
-  echo $(print_message -e 'true' -i 'end' -m 'DB' -s 'Argument #1' -c 'Invalid' -t 'Available: import, fetch')
+  echo $(print_message -e 'true' -i 'end' -m 'DB' -s 'Argument #1' -c 'Invalid' -t 'Available: import, fetch, export_data, restore_data')
   exit
 fi
 
-if ([ "$1" != "import" ] && [ "$1" != "fetch" ] ); then
-  echo $(print_message -e 'true' -i 'end' -m 'DB' -s 'Argument #1' -c 'Invalid' -t 'Available: import, fetch')
+if ([ "$1" != "import" ] && [ "$1" != "fetch" ] && [ "$1" != "export_data" ] && [ "$1" != "restore_data" ] ); then
+  echo $(print_message -e 'true' -i 'end' -m 'DB' -s 'Argument #1' -c 'Invalid' -t 'Available: import, fetch, export_data, restore_data')
   exit
 fi
 
@@ -31,5 +31,18 @@ fi
 if [ $1 == "fetch" ]; then
   shift
   ./modules/db/commands/fetch.sh $ENV_PATH $1
+  exit
+fi
+
+if [ $1 == "export_data" ]; then
+  shift
+  ./modules/db/commands/export_data.sh $ENV_PATH $1
+  exit
+fi
+
+
+if [ $1 == "restore_data" ]; then
+  shift
+  ./modules/db/commands/restore_data.sh $ENV_PATH $1
   exit
 fi
