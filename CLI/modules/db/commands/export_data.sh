@@ -72,6 +72,6 @@ fi
 
 cd $DATA_EXPORT
 tar -zcvf $currentDate.tar.gz ./$currentDate
-##rm -r ./$currentDate/
+rm -r ./$currentDate/
 
 echo $(print_message -i 'end' -m 'DB' -s 'Export Data' -c 'Export' -t 'Completed')
