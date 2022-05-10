@@ -59,8 +59,9 @@ if [ $1 == "global" ]; then
       source $ENV_PATH/.env
     fi
     echo $(print_message -i 'continue' -m 'Service' -s 'Deploy' -c "$service" -a 'Prisma' -t 'Invoked to deploy')
-    dotenv -e $ENV_PATH/.env -- npx prisma migrate deploy
+    
     if [ -f $SERVICES_PATH/$service/model/prisma/schema.prisma ]; then
+      dotenv -e $ENV_PATH/.env -- npx prisma migrate deploy
       dotenv -e $ENV_PATH/.env -- npx prisma generate
     fi
   done
@@ -80,10 +81,12 @@ else
   printf "╠ Service > ${TC_CYAN}$1 > Deploy\n"
     
   echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Deploy' -t 'Started')
-  dotenv -e $ENV_PATH/.env -- npx prisma migrate deploy
+  
   if [ -f $SERVICES_PATH/$service/model/prisma/schema.prisma ]; then
+    dotenv -e $ENV_PATH/.env -- npx prisma migrate deploy
     dotenv -e $ENV_PATH/.env -- npx prisma generate
   fi
+  
   echo $(print_message -i 'end' -m 'Service' -s "$1" -c 'Deploy' -t 'Completed')
   exit
 fi
