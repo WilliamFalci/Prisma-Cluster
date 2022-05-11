@@ -12,7 +12,7 @@ fi
 if [ -f "$DATA_EXPORT/$1.tar.gz" ]; then
   bk=$1
 
-  #yarn rpc backup create
+  yarn rpc backup create
   
   cd $DATA_EXPORT
   echo $(print_message -i 'continue' -m 'Restore Data' -s "$bk" -c 'Dump' -a 'Decompression' -t 'Started')
@@ -44,6 +44,8 @@ if [ -f "$DATA_EXPORT/$1.tar.gz" ]; then
       done
     fi
   fi
+
+  rm -R $DATA_EXPORT/$bk
 
   echo $(print_message -i 'end' -m 'Restore Data' -s "$bk" -c 'Dump' -t 'Applied')
 else
