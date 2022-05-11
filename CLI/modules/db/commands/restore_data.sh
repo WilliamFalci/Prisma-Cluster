@@ -31,7 +31,7 @@ if [ -f "$DATA_EXPORT/$1.tar.gz" ]; then
         if [ -f "$SERVICES_STORAGES/buckets" ]; then
           rm -R $SERVICES_STORAGES/buckets
         fi
-        cp -R $DATA_EXPORT/$bk/data/buckets $SERVICES_STORAGES/buckets
+        cp -R $DATA_EXPORT/$bk/data/buckets $SERVICES_STORAGES
         echo $(print_message -i 'continue' -m 'Restore Data' -s '$bk' -c 'Dump' -a 'Storage' -t 'Files applied')
     else
       for d in $DATA_EXPORT/$bk/data/* ; do
