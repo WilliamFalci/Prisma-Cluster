@@ -61,6 +61,10 @@ Prisma Cluster is an **Full Stack Service Manager**, using the Next-Generation O
 - Full Backup creation
 - Full Rollback to an specific Backup
 - Service deletion tracker
+- Service's data export (DB's data and files (files are optional) )
+- Service's data import (DB's data and files (files are optional) )
+- Gloabl's data export (DB's data and files (filese are optional) )
+- Gloabl's data import (DB's data and files (filese are optional) )
 - Import Tables / Data from existing projects
 - Generate Model and Interface using Database Introspection
 
@@ -110,7 +114,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 ## Global Requirements <a href="#top">(Back to Top)</a>
 - Node
 - Docker
-- Docker-Compose
+- Docker-Compose v2
 - [Prisma](https://www.prisma.io/docs/concepts/components/prisma-cli/installation): `yarn global add prisma`
 - Dotenv-cli: `yarn global add dotenv-cli`
 
@@ -167,8 +171,10 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 |  |  |  └─ backup.sh 
 |  |  ├─ db
 |  |  |  ├─ commands
+|  |  |  |  ├─ export_data.sh
 |  |  |  |  ├─ fetch.sh
-|  |  |  |  └─ import.sh
+|  |  |  |  ├─ import.sh
+|  |  |  |  └─ restore_data.sh
 |  |  |  └─ db.sh
 |  |  ├─ master_interface
 |  |  |  ├─ commands
@@ -213,7 +219,8 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 |  ├─ docker-compose.replication.yml      (Not provided - copy blank.docker-compose.replication.yml and replace the values)
 |  ├─ docker-compose.yml
 |  └─ server.sh
-├─ RPC  
+├─ RPC
+|  ├─ data-export                         (not provided - will be auto-generated from CLI in case you export data)
 |  ├─ jobs                                (not provided - will be auto-generated from CLI in case you add an job to the service)
 |  |  ├─ services
 |  |  |  └─ [service-name] * n
@@ -294,6 +301,8 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - **DB**
 - - **Fetch**: ```yarn rpc db fetch [service-name]```
 - - **Import**: ```yarn rpc db import [service-name] [file-to-import.sql]```
+- - **export_data**: ```yarn rpc db export_data [mode/service-name]```
+- - **restore_data**: ```yarn rpc db restore_data [file-to-restore]```
 - **MASTER INTERFACE**
 - - **Generate**: ```yarn rpc master_interface generate```
 - - **Update**: ```yarn rpc master_interface update```
@@ -338,6 +347,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - - - Deletion of [method-name] method under ```./services/[service-name]/methods/[method-name]_method.js```
 - - - Deletion of injection into [service-name]'s router
 - - - Auto configuration of [method-name] controller with [service-name]'s model interface into ```[method-name]_controller.js```
+
 #### SERVICE > MIGRATE: <a href="#top">(Back to Top)</a>
 - Apply schema changes to DB
 - Make migration file
@@ -370,6 +380,20 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 #### DB > FETCH (ATTENTION ON USE IT): <a href="#top">(Back to Top)</a>
 - This command will fetch the entire database generating Prisma model, the usage scenario is when you need import structure from an already exist DB (so previously you used DB > Import) and then you need generate the model's interface, if you use it outside this scenario be carefull on generate conflicts with migrations
 - Please read  <a href="#how-init-service-from-existing-schema">How init service from existing schema</a> to avoid conflicts on migration process
+
+#### DB > EXPORT_DATA: <a href="#top">(Back to Top)</a>
+- This command will export the data you required. Using: ```yarn rpc db export_data global``` will be exported the data of all services, asking you if you want export files stored into file storages as well, else, using ```yarn rpc db export_data [service-name]``` will be exported only the specific service's data, always asking you if you want export files stored into file storage for the specific service.
+- The data dump and files will be stored under the folder ```./RPC/data-export```, the dump will be automatically compressed and the name will be ```data_[current-datetime].tar.gz```
+
+#### DB > RESTORE_DATA: <a href="#top">(Back to Top)</a>
+- Usage: ```yarn rpc db restore_data dump_[current-datetime]``` , the file must be under the folder ```./RPC/data-export```
+- This command will just apply the data (and files if they are contained into the dump)
+- ATTENTION: this logic is made to RESTORE and not IMPORT, so if you have already data in your data this will make conflicts in case of unique keys and primary keys, so is in your logic the application of it. If you want mod the dump you then:
+- - Locate your dump under ```./RPC/data-export```
+- - Run: ```tar -xf [dump-name].tar.gz``` (this will extract the dump)
+- - Now you will have a new folder named like the dump with 2 subfolder or just 1 (depends if you exported files as well)
+- - Locate the ```db``` folder under the dump's folder and there you will find the ```.sql``` file
+- - If you need mod the files exported from files storage then you have to locate the folder ```data`` under the dump's folder, this actions is not recommended if you don't know good [petersirka/node-filestorage](https://github.com/petersirka/node-filestorage)
 
 #### MASTER INTERFACE > GENERATE: <a href="#top">(Back to Top)</a>
 - Will generate the interface of Master DB
@@ -431,7 +455,6 @@ In ```prisma-cluster/DB/replication/env/env.replication``` apply:
 
 
 If you did everything right then will work XD
-
 
 
 What do this script? The script will add the table to ```tables``` to keep track of tables subscribed, then generate the SQL of subscription under ```prisma-cluster/DB/replication/init``` in this way everytime the docker will be mounted will import the subscriptions if they not exist already, then if the docker container is running will directly invoke psql to generate the subscription
