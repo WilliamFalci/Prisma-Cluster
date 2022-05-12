@@ -108,6 +108,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - [x] Node-Cache
 - [ ] WebSocket Handler Using fastify
 - [ ] Websocket Subscription to the wal logical of Postgress (Realtime) 
+- [ ] Prima-Cluster GUI (To manage the RPC Infrastructure directly from a local website)
 
 <a name="global_requirements"></a>
 
