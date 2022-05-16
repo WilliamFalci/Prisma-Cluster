@@ -23,5 +23,5 @@ fi
 service=$1
 method=$2
 
-sed -i "/^const processCWD = process.cwd()/aconst { master_interface } = require('${MASTER_PATH}/master_interface.js');" $SERVICES_PATH/$service/controllers/${method}_controller.js
+sed -i "/^const processCWD = process.cwd()/aconst { master_interface } = require(process.env.MASTER_PATH + '/master_interface.js');" $SERVICES_PATH/$service/controllers/${method}_controller.js
 echo $(print_message -i 'continue' -m 'Service' -s "$service" -c 'Master Interface' -t ''"$service"' > Master Interface added')
