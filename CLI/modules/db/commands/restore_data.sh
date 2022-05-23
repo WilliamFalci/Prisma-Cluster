@@ -9,69 +9,55 @@ else
   shift
 fi
 
-if [ -z "$1" ]; then
-  echo $(print_message -e 'true' -i 'end' -m 'DB' -s 'Export Data' -c 'Argument #1' -a 'Invalid' -t 'Available: global, [service-name]')
-  exit
-fi
+if [ -f "$DATA_EXPORT/$1.tar.gz" ]; then
+  bk=$1
 
-currentDate="data_$(date +%d-%m-%Y"_"%H_%M_%S)"
-bk_name=dump_${currentDate}.sql
+  yarn rpc backup create
+  
+  cd $DATA_EXPORT
+  echo $(print_message -i 'continue' -m 'Restore Data' -s "$bk" -c 'Dump' -a 'Decompression' -t 'Started')
+  tar -xf $bk.tar.gz
+  echo $(print_message -i 'continue' -m 'Restore Data' -s "$bk" -c 'Dump' -a 'Decompression' -t 'End')
 
-if [ ! -d "$DATA_EXPORT" ]; then
-  mkdir -p "$DATA_EXPORT"
-fi
+  if [ -f "$DATA_EXPORT/$bk/global.txt" ]; then
+    cat $DATA_EXPORT/$bk/db/dump_$bk.sql | docker exec -i "${DOCKER_CONTAINER}" psql -U ${POSTGRES_USER}
+  else
+    for f in $FILES
+    do
+      echo $f
+    done
 
-mkdir -p "$DATA_EXPORT/$currentDate"
-mkdir -p "$DATA_EXPORT/$currentDate/db"
-mkdir -p "$DATA_EXPORT/$currentDate/data"
-
-if [ $1 == "global" ]; then
-  echo $(print_message -i 'continue' -m 'Export Data' -s 'DB' -c 'Docker' -t 'Exporting...')
-  docker exec -t "${DOCKER_CONTAINER}" pg_dumpall --exclude-database=master --exclude-database=pg_database -U ${POSTGRES_USER} --data-only --no-privileges --no-owner --exclude-table-data '*._prisma_migrations' > $DATA_EXPORT/$currentDate/db/$bk_name
-
-  touch $DATA_EXPORT/$currentDate/global.txt
-  while true; do
-    echo $(print_message -w 'true' -i 'continue' -m 'Export Data' -s "Storage" -c 'Files' -t "Do you want export the relative files as well?")
-    read yn
-    case $yn in
-      [Yy]* ) 
-        cp -r $SERVICES_STORAGES/buckets $DATA_EXPORT/$currentDate/data      
-        echo $(print_message -i 'continue' -m 'Export Data' -s "Storage" -c "All" -a "Files" -t 'Files Exported');break;;
-      [Nn]* )  echo $(print_message -i 'end' -m 'Export Data' -s "Storage" -c 'Files' -t 'Aborted'); exit;;
-      * )  echo $(print_message -i 'continue' -m 'Export Data' -s "Storage" -c 'Files' -a 'Answer' -t 'Invalid! Please answer yes or no [y/n]');;    
-    esac
-  done
-else
-  if [ ! -d "$SERVICES_PATH/$1" ]; then
-    echo $(print_message -i 'end' -m 'DB' -s 'Export Data' -c 'Export' -t 'Nothing to export, the service do not exist')
-    exit
+    cat $DATA_EXPORT/$bk/db/dump_$bk.sql | docker exec -i "${DOCKER_CONTAINER}" psql -U ${POSTGRES_USER}
   fi
 
-  touch $DATA_EXPORT/$currentDate/service.txt
 
-  echo $(print_message -i 'continue' -m 'Export Data' -s 'DB' -c 'Docker' -a "$1" -t 'Exporting...')
-  docker exec -t "${DOCKER_CONTAINER}" pg_dump -U ${POSTGRES_USER} -d $1  --data-only --no-privileges --no-owner --exclude-table-data '*._prisma_migrations' > $DATA_EXPORT/$currentDate/db/$1.sql
-  echo $(print_message -i 'continue' -m 'Export Data' -s 'DB' -c 'Docker' -a "$1" -t 'Data Exported...')
-  while true; do
-    echo $(print_message -w 'true' -i 'continue' -m 'Export Data' -s "Storage" -c 'Files' -t "Do you want export the relative files as well?")
-    read yn
-    case $yn in
-      [Yy]* )
-        if [ -d "$SERVICES_STORAGES/buckets/$1" ]; then
-          cp -r $SERVICES_STORAGES/buckets/$1 $DATA_EXPORT/$currentDate/data
-          echo $(print_message -i 'continue' -m 'Export Data' -s "Storage" -c "$1" -a "Service" -t 'Files Exported');
-        else
-          echo $(print_message -i 'continue' -m 'Export Data' -s "Storage" -c "$1" -a "Service" -t 'Has no files to export');
+  subdircount=$(find $DATA_EXPORT/$bk/data -maxdepth 1 -type d | wc -l)
+
+  if [[ "$subdircount" -eq 1 ]]
+  then
+    echo $(print_message -i 'continue' -m 'Restore Data' -s '$bk' -c 'Dump' -a 'Storage' -t 'Nothing to apply')
+  else
+    if [ -f "$DATA_EXPORT/$bk/global.txt" ]; then
+        if [ -f "$SERVICES_STORAGES/buckets" ]; then
+          rm -R $SERVICES_STORAGES/buckets
         fi
-        break;;
-      [Nn]* )  echo $(print_message -i 'end' -m 'Export Data' -s "Storage" -c 'Files' -t 'Aborted'); break;;
-      * )  echo $(print_message -i 'continue' -m 'Export Data' -s "Storage" -c 'Files' -a 'Answer' -t 'Invalid! Please answer yes or no [y/n]');;    
-    esac
-  done
+        cp -R $DATA_EXPORT/$bk/data/buckets $SERVICES_STORAGES
+        echo $(print_message -i 'continue' -m 'Restore Data' -s '$bk' -c 'Dump' -a 'Storage' -t 'Files applied')
+    else
+      for d in $DATA_EXPORT/$bk/data/* ; do
+        service=$(basename $d)
+        if [ -d "$SERVICES_STORAGES/buckets/$service" ]; then
+          rm -R $SERVICES_STORAGES/buckets/$service
+        fi
+        cp -R $DATA_EXPORT/$bk/data/$service $SERVICES_STORAGES/buckets/$service
+        echo $(print_message -i 'continue' -m 'Restore Data' -s '$bk' -c "$service dump" -a 'Storage' -t 'Files applied')
+      done
+    fi
+  fi
+
+  rm -R $DATA_EXPORT/$bk
+
+  echo $(print_message -i 'end' -m 'Restore Data' -s "$bk" -c 'Dump' -t 'Applied')
+else
+  echo $(print_message -e 'true' -i 'end' -m 'Restore Data' -s "$bk" -c 'Not Found' -t 'Data do not exist')
 fi
-
-cd $DATA_EXPORT
-tar -zcvf $currentDate.tar.gz ./$currentDate
-rm -r ./$currentDate/
-
-echo $(print_message -i 'end' -m 'DB' -s 'Export Data' -c 'Export' -t 'Completed')
