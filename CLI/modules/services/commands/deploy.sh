@@ -18,6 +18,7 @@ fi
 echo $(print_message -i 'continue' -m 'Service' -s 'Deploy' -c 'Backup' -a 'Global' -t 'I'"'"'m generating a global backup before deploy')
 yarn rpc backup create
 
+databases=$(docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -c "SELECT datname FROM pg_database WHERE datname <> 'postgres' AND datname <> 'master' AND datistemplate = false;" 2>&1)
 
 if [ $1 == "global" ]; then
   cd $SERVICES_PATH
@@ -31,7 +32,8 @@ if [ $1 == "global" ]; then
     cd $SERVICES_PATH/$service/model
     echo $(print_message -i 'continue' -m 'Service' -s 'Deploy' -c "$service" -a 'DB' -t 'Checking if exist')
 
-    if docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -lqt | cut -d \| -f 1 | grep -qw "$service"; then
+    echo $service    
+    if echo $databases | grep -qw $service; then
       echo $(print_message -i 'continue' -m 'Service' -s 'Deploy' -c "$service" -a 'DB' -t 'Already exist')
     else
       echo $(print_message -i 'continue' -m 'Service' -s 'Deploy' -c "$service" -a 'DB' -t 'Not exist... start to generate it')
