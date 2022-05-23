@@ -51,7 +51,7 @@ else
 
   echo $(print_message -i 'continue' -m 'Export Data' -s 'DB' -c 'Docker' -a "$1" -t 'Exporting...')
   docker exec -t "${DOCKER_CONTAINER}" pg_dump -U ${POSTGRES_USER} -d $1  --data-only --no-privileges --no-owner > $DATA_EXPORT/$currentDate/db/$1.sql
-
+  echo $(print_message -i 'continue' -m 'Export Data' -s 'DB' -c 'Docker' -a "$1" -t 'Data Exported...')
   while true; do
     echo $(print_message -w 'true' -i 'continue' -m 'Export Data' -s "Storage" -c 'Files' -t "Do you want export the relative files as well?")
     read yn
@@ -64,7 +64,7 @@ else
           echo $(print_message -i 'continue' -m 'Export Data' -s "Storage" -c "$1" -a "Service" -t 'Has no files to export');
         fi
         break;;
-      [Nn]* )  echo $(print_message -i 'end' -m 'Export Data' -s "Storage" -c 'Files' -t 'Aborted'); exit;;
+      [Nn]* )  echo $(print_message -i 'end' -m 'Export Data' -s "Storage" -c 'Files' -t 'Aborted'); break;;
       * )  echo $(print_message -i 'continue' -m 'Export Data' -s "Storage" -c 'Files' -a 'Answer' -t 'Invalid! Please answer yes or no [y/n]');;    
     esac
   done
