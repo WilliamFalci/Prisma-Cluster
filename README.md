@@ -387,7 +387,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 - The data dump and files will be stored under the folder ```./RPC/data-export```, the dump will be automatically compressed and the name will be ```data_[current-datetime].tar.gz```
 
 #### DB > RESTORE_DATA: <a href="#top">(Back to Top)</a>
-- Usage: ```yarn rpc db restore_data dump_[current-datetime]``` , the file must be under the folder ```./RPC/data-export```
+- Usage: ```yarn rpc db restore_data data_[current-datetime]``` , the file must be under the folder ```./RPC/data-export```
 - This command will just apply the data (and files if they are contained into the dump)
 - ATTENTION: this logic is made to RESTORE and not IMPORT, so if you have already data in your data this will make conflicts in case of unique keys and primary keys, so is in your logic the application of it. If you want mod the dump you then:
 - - Locate your dump under ```./RPC/data-export```
