@@ -50,7 +50,7 @@ else
   touch $DATA_EXPORT/$currentDate/service.txt
 
   echo $(print_message -i 'continue' -m 'Export Data' -s 'DB' -c 'Docker' -a "$1" -t 'Exporting...')
-  docker exec -t "${DOCKER_CONTAINER}" pg_dump -U ${POSTGRES_USER} -d $1  --data-only --no-privileges --no-owner --exclude-table-data '*._prisma_migrations' > $DATA_EXPORT/$currentDate/db/$bk_name
+  docker exec -t "${DOCKER_CONTAINER}" pg_dump -U ${POSTGRES_USER} -d $1  --data-only --no-privileges --no-owner --exclude-table-data '*._prisma_migrations' > $DATA_EXPORT/$currentDate/db/$1.sql
   echo $(print_message -i 'continue' -m 'Export Data' -s 'DB' -c 'Docker' -a "$1" -t 'Data Exported...')
   while true; do
     echo $(print_message -w 'true' -i 'continue' -m 'Export Data' -s "Storage" -c 'Files' -t "Do you want export the relative files as well?")
