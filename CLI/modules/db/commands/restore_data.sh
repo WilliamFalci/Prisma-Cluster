@@ -22,14 +22,12 @@ if [ -f "$DATA_EXPORT/$1.tar.gz" ]; then
   if [ -f "$DATA_EXPORT/$bk/global.txt" ]; then
     cat $DATA_EXPORT/$bk/db/dump_$bk.sql | docker exec -i "${DOCKER_CONTAINER}" psql -U ${POSTGRES_USER}
   else
-    for f in $FILES
+    for f in $DATA_EXPORT/$bk/db/*.sql
     do
-      echo $f
+      filename=$(basename $f .sql)
+      cat $DATA_EXPORT/$bk/db/$filename.sql | docker exec -i "${DOCKER_CONTAINER}" psql -U ${POSTGRES_USER} -d $filename
     done
-
-    cat $DATA_EXPORT/$bk/db/dump_$bk.sql | docker exec -i "${DOCKER_CONTAINER}" psql -U ${POSTGRES_USER}
   fi
-
 
   subdircount=$(find $DATA_EXPORT/$bk/data -maxdepth 1 -type d | wc -l)
 
