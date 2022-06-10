@@ -213,6 +213,17 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 |  |  |  ├─ 00-Create_repl_userl.sql      (SQL command to generate repl_user for the replication mode)         
 |  |  |  ├─ 01-Create_table_[table].sql   (File auto-generated when an subscription will be created, will contain che creation of the table schema)
 |  |  |  └─ 02-Create_sub_[table].sql     (File auto-generated when an subscription will be created, will contain che creation of subscription)
+|  |  ├─ parent_example
+|  |  |  ├─ scripts
+|  |  |  |  ├─ MAKE_REPL_USER.sh
+|  |  |  |  ├─ publications.sh
+|  |  |  |  └─ single-publication.sh
+|  |  |  ├─ .pg_hba.conf
+|  |  |  ├─ .postgresql.conf
+|  |  |  ├─ .replication.env
+|  |  |  ├─ README
+|  |  |  ├─ server.sh
+|  |  |  └─ tables
 |  |  ├─ scripts
 |  |  |  └─ subscriptions
 |  |  |     ├─ single-subscription.sh     (postgres make subscription script)
