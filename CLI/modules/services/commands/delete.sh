@@ -47,6 +47,11 @@ sed -i "/SERVICE_${1^^}_DB_URL/d" $ENV_PATH/.env
 echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Delete' -a 'Enviroment' -t 'Variable '"SERVICE_${1^^}_DB_URL"' deleted')
 sed -i '/^$/d' $ENV_PATH/.env
 
+if test -f "$JOBS_PATH/services/$1.js"; then
+  rm -rf ${JOBS_PATH}/services/$1.js || true
+  sed -i "/const $1Jobs =/d" $JOBS_PATH/index.js
+  echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Delete' -a 'Jobs' -t 'Jobs deleted')
+fi
 
 sed -i "/const $1 = require('.\/services\/$1\/router.js');/d" $PROJECT_PATH/RPC/router.js
 sed -i "/methods = Object.assign(methods,{$1: $1})/d" $PROJECT_PATH/RPC/router.js
@@ -59,13 +64,13 @@ while true; do
     [Yy]* ) 
       rm -rf ${SERVICES_STORAGES}/buckets/$1 || true;
       echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Delete' -a 'Storage' -t 'Files Deleted');break;;
-    [Nn]* )  echo $(print_message -i 'end' -m 'Service' -s "$2" -c 'Delete' -a 'Storage' -t 'Aborted'); exit;;
+    [Nn]* )  echo $(print_message -i 'end' -m 'Service' -s "$2" -c 'Delete' -a 'Storage' -t 'Physically deletion aborted'); break;;
     * )  echo $(print_message -i 'end'-m 'Service' -s "$2" -c 'Delete' -a 'Answer' -t 'Invalid! Please answer yes or no [y/n]');;    
   esac
 done
 
-sed -i "/const storage_$1 = require('filestorage').create(\`\${__dirname}\/buckets\/$1\`)/d" $SERVICES_STORAGES/index.js
-sed -i "/\ \ storage_$1,/d" $SERVICES_STORAGES/index.js
+sed -i "/const storage_$1/d" $SERVICES_STORAGES/index.js
+sed -i "/storage_$1/d" $SERVICES_STORAGES/index.js
 echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Delete' -a 'Storage' -t 'Logical link Deleted')
 
 

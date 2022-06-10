@@ -94,10 +94,13 @@ if [ "$create_credentials" == "true" ]; then
   echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Credentials' -t 'Service'"'"'s db user: '"$service_user"' have now access to '"$1"''"'"'s DB')
 fi
 
-echo -e "const storage_$1 = require('filestorage').create(\`\${__dirname}/buckets/$1\`)\n$(cat $SERVICES_STORAGES/index.js)" > $SERVICES_STORAGES/index.js
-sed -i "/^module.exports = {/a\ \ storage_$1," $SERVICES_STORAGES/index.js
-echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Storage' -t 'Created')
-
+if grep -w -q "storage_$1" $SERVICES_STORAGES/index.js; then
+  echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Storage' -t 'Creation skipped, Bucket already exist')
+else
+  sed -i "/^\/\/ DO NOT ALTER OR DELETE THIS LINE - IMPORT STORAGE SERVICES/a \const storage_$1 = require('filestorage').create('./buckets/$1');" $SERVICES_STORAGES/index.js
+  sed -i "/^module.exports = {/a\ \ storage_$1," $SERVICES_STORAGES/index.js
+  echo $(print_message -i 'continue' -m 'Service' -s "$1" -c 'Create' -a 'Storage' -t 'Created')
+fi
 
 sed -i "/^\/\/ DO NOT ALTER OR DELETE THIS LINE - IMPORT SERVICES METHODS/a \const $1 = require('./services/$1/router.js');" $PROJECT_PATH/RPC/router.js
 sed -i "/^let methods = {}/a \methods = Object.assign(methods,{$1: $1});" $PROJECT_PATH/RPC/router.js

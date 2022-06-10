@@ -40,7 +40,7 @@ if [ "$1" == 'add' ]; then
     job_code="
       const path = require('path');
       \nrequire('dotenv').config({ path: path.resolve(process.env.ENV_PATH, '.env') }); // SUPPORT .ENV FILES
-      \nconst { storage_$service } = require(process.env.SERVICES_STORAGES + 'index.js')
+      \nconst { storage_$service } = require(process.env.SERVICES_STORAGES + '/index.js')
       \nconst processCWD = process.cwd()
       \nprocess.chdir(process.env.SERVICES_PATH + '/$service/model');
       \nconst { PrismaClient } = require(process.env.SERVICES_PATH + '/$service/model/interface')
@@ -50,6 +50,11 @@ if [ "$1" == 'add' ]; then
       \nconst CronJob = require('cron').CronJob;
       \nconst TZ = Intl.DateTimeFormat().resolvedOptions().timeZone
       \n
+      \nlet runninTaskStatus = {
+      \n\t$job_name: false
+      \n}
+      \n
+      \n// YOU DON'T KNOW HOW SET CRONTAB TIME?: https://crontab.guru/examples.html
       \nmodule.exports = {
       \n}
     "
@@ -58,17 +63,20 @@ if [ "$1" == 'add' ]; then
     echo $(print_message -i 'continue' -m 'Service' -s 'Job' -c 'Main File' -t 'Created')
   fi
 
-  sed -i "/^module.exports = {/a\ \ $job_name: new CronJob('* * * * * *', () => {console.log('emailerJobs > ${job_name} > is Running!');}, null, true, TZ)," $JOBS_PATH/services/$service.js
+  # sed -i "/^module.exports = {/a\ \ $job_name: new CronJob('* * * * * *', () => {console.log('emailerJobs > ${job_name} > is Running');}, null, true, TZ)," $JOBS_PATH/services/$service.js
+  sed -i "/^module.exports = {/a\ \ $job_name: new CronJob('* * * * * *', () => {\n\t\tif(runninTaskStatus.$job_name){ console.log('$serviceJobs > job_name > skipped another istance is running'); return true } else {runninTaskStatus.$job_name = true}\n\t\tconsole.log('emailerJobs > ${job_name} > is Running');\n\t\t//CODE HERE BRO!\n\t\tconsole.log('emailerJobs > ${job_name} > is Terminated');\n\t\trunninTaskStatus.$job_name = false\n\t}, null, true, TZ)," $JOBS_PATH/services/$service.js
 
   if [ ! -f "$JOBS_PATH/index.js" ]; then
     echo -e "const path = require('path')
-            \nconst dotenv = require('dotenv').config({ path: path.resolve(__dirname, `../../CLI/env/.env`) })" > $JOBS_PATH/index.js
+            \nconst dotenv = require('dotenv').config({ path: path.resolve(__dirname, `../../CLI/env/.env`) })
+            \n
+            \n// DO NOT ALTER OR DELETE THIS LINE - IMPORT CRON SERVICES" > $JOBS_PATH/index.js
   fi
 
   if grep -w "${service}Jobs" $JOBS_PATH/index.js; then
     echo $(print_message -i 'end' -m 'Service' -s 'Job' -c 'Add' -t ''"$job_name"' > Job Added')
   else
-    sed -i "1i const ${service}Jobs = require('.\/services\/${service}.js')" $JOBS_PATH/index.js
+    sed -i "/^\/\/ DO NOT ALTER OR DELETE THIS LINE - IMPORT CRON SERVICES/a \const ${service}Jobs = require('.\/services\/${service}.js')" $JOBS_PATH/index.js
     sed -i "$ a ${service}Jobs" $JOBS_PATH/index.js
     echo $(print_message -i 'end' -m 'Service' -s 'Job' -c 'Add' -t ''"$job_name"' > Job Added')
   fi
