@@ -1,0 +1,49 @@
+THIS FOLDER IS AN EXAMPLE OF SCRIPTS AND CONFIGURATION FOR YOUR PARENT DATABASE IN REPLICATION MODE!
+
+The content of this folder must be edited under your own skills and project structure.
+
+
+The logic is:
+
+SCRIPTS:
+./scripts/MAKE_REPL_USER.sh -> Generate the sql file containing the query for generate the repl_user
+./scripts/single-publication.sh -> Generate the Publication on Parent DB for the specified table and store the table's name into ./table file
+./scripts/publication.sh -> Generate the Publications for all the tables stored into ./table file (ideally to run on restoring db or transfer)
+
+CONFIGS:
+./postgresql.conf and ./pg_hba.conf are mandatory to set Postgres in Logical Replication (you can just copy and paste those files, just remove the dot before the name)
+
+ENVIROMENT:
+./.replication.env must contain both connection details (parent and slave) + the docker container name of Parent if is running under docker
+
+
+DOCKER:
+If your Parent DB is running under docker you need edit your .yml
+
+Under the potsgres container you need:
+  volumes:
+    - dev_postgres_data:/var/lib/postgresql/data
+    - dev_postgres_data_backups:/backups
+    - dev_postgres_config:/cluster_config
+  extra_hosts:
+    - slave_node:${POSTGRES_SLAVE_HOST}
+  command: postgres -c config_file=/cluster_config/postgresql.conf -c hba_file=/cluster_config/pg_hba.conf
+  configs:
+      - source: pg_hba
+        target: /cluster_config/pg_hba.conf
+      - source: postgresql
+        target: /cluster_config/postgresql.conf
+
+Under root of the file:
+  configs:
+    pg_hba:
+      file: ./compose/dev/postgres/replication/pg_hba.conf
+    postgresql:
+      file: ./compose/dev/postgres/replication/postgresql.conf
+
+
+Logical explanation:
+
+[Root Configs] declare the configurations files must be copied into Posgress Container inside [cluster_config] volume, the command go to set those files like configuration files for postgres
+
+Then probably you will need an script to parse properly the enviroments variable, look the server.sh example in this directory to understand

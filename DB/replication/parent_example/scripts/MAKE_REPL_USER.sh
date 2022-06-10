@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source ../.replication.env
+
+MODE=$1  ### IF YOU HAVE SUB FOLDER FOR ENVS LIKE: LOCAL/DEV/PRODUCTION
+source /xxx/xxx/backend_parent_project/.envs/.${MODE}/.postgres ### ENVIROMENT VARIABLES OF POSTGRES CONNECTION
+
+docker exec -it "${DJANGO_POSTGRES_CONTAINER}" psql -U $POSTGRES_USER -d euroingro -c "CREATE ROLE $POSTGRES_REPLICATION_USER REPLICATION LOGIN PASSWORD '$POSTGRES_REPLICATION_PASSWORD';"

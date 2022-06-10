@@ -16,8 +16,9 @@ if [ check == 'true' ]; then
   fi
 fi
 
+tables=$(docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -c "SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema';" 2>&1)
 
-if docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -lqt | cut -d \| -f 1 | grep -qw "$1"; then
+if echo $tables | grep -qw "$1"; then
   docker exec -it ${DOCKER_CONTAINER} pg_dump -U $POSTGRES_USER -d master --no-privileges --no-owner -t $1 -s 
   echo 'Table already exist, dumped the local one'
 else
