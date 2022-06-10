@@ -52,6 +52,9 @@ The Repository will be updated everytime it's needed, the same project is releas
 
 ## What is Prisma Cluster? <a href="#top">(Back to Top)</a>
 
+![PRSIMA CLUSTER (3)](https://user-images.githubusercontent.com/36926081/173039745-5c4a0e66-3d90-4204-b6d3-8e55c86e158b.png)
+
+
 Prisma Cluster is an **Full Stack Service Manager**, using the Next-Generation ORM [Prisma](https://github.com/prisma/prisma) and the Powerfull of [Jayson RPC](https://github.com/tedeh/jayson) + Dockerized Postgres, Prisma Cluster allow you to create an cluster of Databases with: 
 
 - (Optional Slave DB connected with external Parent DB)
@@ -283,7 +286,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 ### Available commands: <a href="#top">(Back to Top)</a>
 - **SERVICE**
 - - **Connect**: ```yarn rpc service connect [service-name] [method-name]```
-- - **Create**: ```yarn rpc service create [service-name] [(optional in regular_mode, in only_master mode is mandatory with value: false, default = false) create_credentials: [true/false]] [(optional, default = false) only_master: [true/false]]```
+- - **Create**: ```yarn rpc service create [service-name] [OPTIONAL | create_credentials: [true/false] | default = true] [OPTIONAL | only_master: [true/false] | default = false]```
 - - **Delete**: ```yarn rpc service delete [service-name]```
 - - **Method**: ```yarn rpc service method [service-name] [action: add/delete] [method-name] [(optional): master_only]```
 - - **Migrate**: ```yarn rpc service migrate [mode/service-name]```
