@@ -432,6 +432,7 @@ Simple, many devs / sites / platforms are already stuctured with API, plus for s
 
 #### If Docker return permission denied on conf files please be sure to fix the permission, example:
 ![image (1)](https://user-images.githubusercontent.com/36926081/158415349-13ad3194-49fd-45d0-ab66-187a8e820e76.jpg)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWilliamFalci%2FPrisma-Cluster.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FWilliamFalci%2FPrisma-Cluster?ref=badge_shield)
 
 #### Concept
 Considering the scenario of 2 Postgres Servers:
@@ -562,3 +563,7 @@ Following the "How to use" of Node-Pg-Compare you will get the SQL File to apply
 - Copy the SQL File generated with node-pg-compare to ```./DB/import/```
 - Run the following command ```yarn rpc db import master [sql-filename].sql```
 - Enjoy
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWilliamFalci%2FPrisma-Cluster.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FWilliamFalci%2FPrisma-Cluster?ref=badge_large)
