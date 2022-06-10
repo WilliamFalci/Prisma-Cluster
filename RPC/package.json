@@ -5,11 +5,18 @@
   "author": "Falci William Peter",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "dev": "nodemon server.js",
+    "trace_gc": "node --trace_gc server.js"
+  },
   "devDependencies": {
     "dotenv": "^16.0.0",
-    "jayson": "^3.6.6"
+    "jayson": "^3.6.6",
+    "nodemon": "^2.0.16"
   },
   "dependencies": {
+    "cron": "^2.0.0",
+    "filestorage": "^1.7.1",
     "node-cache": "^5.1.2"
   }
 }
