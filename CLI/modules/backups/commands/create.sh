@@ -33,7 +33,7 @@ for d in $SERVICES_PATH/* ; do
   cp -r $SERVICES_PATH/$service/controllers $SERVICES_BACKUP/$currentDate/services/$service/controllers
   cp -r $SERVICES_PATH/$service/methods $SERVICES_BACKUP/$currentDate/services/$service/methods
 
-  if [ -d "$SERVICES_PATH/$service/model/prisma/migrations $SERVICES_BACKUP/$currentDate/services/$service/migrations" ]; then
+  if [ -d "$SERVICES_PATH/$service/model/prisma/migrations" ]; then
     cp -r $SERVICES_PATH/$service/model/prisma/migrations $SERVICES_BACKUP/$currentDate/services/$service/migrations
   fi
   
