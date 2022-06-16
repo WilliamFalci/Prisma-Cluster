@@ -73,11 +73,10 @@ if [ "$1" == 'add' ]; then
             \n// DO NOT ALTER OR DELETE THIS LINE - IMPORT CRON SERVICES" > $JOBS_PATH/index.js
   fi
 
-  if grep -w "${service}Jobs" $JOBS_PATH/index.js; then
+  if grep -w -q "const ${service}Jobs = require('.\/services\/${service}.js')" $JOBS_PATH/index.js; then
     echo $(print_message -i 'end' -m 'Service' -s 'Job' -c 'Add' -t ''"$job_name"' > Job Added')
   else
     sed -i "/^\/\/ DO NOT ALTER OR DELETE THIS LINE - IMPORT CRON SERVICES/a \const ${service}Jobs = require('.\/services\/${service}.js')" $JOBS_PATH/index.js
-    sed -i "$ a ${service}Jobs" $JOBS_PATH/index.js
     echo $(print_message -i 'end' -m 'Service' -s 'Job' -c 'Add' -t ''"$job_name"' > Job Added')
   fi
 fi
