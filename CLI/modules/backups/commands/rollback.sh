@@ -26,12 +26,12 @@ if [ -f "$SERVICES_BACKUP/$1.tar.gz" ]; then
   
   while read database; do
     service=${database/$'\r'/}
-    service_user=SERVICE_${1^^}_DB_USER
-    docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -c "DROP DATABASE IF EXISTS $service;"
-    docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -c "DROP USER $service_user;"
-  done < <(docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -c "SELECT datname FROM pg_database WHERE datname <> 'postgres' AND datname <> 'master' AND datistemplate = false;" 2>&1)
-
-  cat $SERVICES_BACKUP/$bk/db/dump_$bk.sql | docker exec -i "${DOCKER_CONTAINER}" psql -U ${POSTGRES_USER}
+    if ([[ "$service" != *"datname"* ]] && [[ "${service::1}" == [a-zA-Z] ]] && [ "${service::1}" != "-" ] && [ "${service::1}" != "(" ]); then
+      service_user=SERVICE_${1^^}_DB_USER
+      docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -c "DROP DATABASE IF EXISTS $service;"
+      docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -c "DROP USER $service_user;"  done < <(docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -c "SELECT datname FROM pg_database WHERE datname <> 'postgres' AND datname <> 'master' AND datistemplate = false;" 2>&1)
+      cat $SERVICES_BACKUP/$bk/db/dump_$bk.sql | docker exec -i "${DOCKER_CONTAINER}" psql -U ${POSTGRES_USER}
+    fi
   echo $(print_message -i 'continue' -m 'Backup' -s "$bk" -c 'Rollback' -a 'Docker' -t 'Database restored')
   
   subdircount=$(find $SERVICES_PATH -maxdepth 1 -type d | wc -l)

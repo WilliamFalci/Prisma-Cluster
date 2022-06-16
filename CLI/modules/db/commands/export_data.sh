@@ -27,7 +27,15 @@ mkdir -p "$DATA_EXPORT/$currentDate/data"
 
 if [ $1 == "global" ]; then
   echo $(print_message -i 'continue' -m 'Export Data' -s 'DB' -c 'Docker' -t 'Exporting...')
-  docker exec -t "${DOCKER_CONTAINER}" pg_dumpall --exclude-database=master --exclude-database=pg_database -U ${POSTGRES_USER} --data-only --no-privileges --no-owner --exclude-table-data '*._prisma_migrations' > $DATA_EXPORT/$currentDate/db/$bk_name
+
+  while read database; do
+    service=${database/$'\r'/}
+    if ([[ "$service" != *"datname"* ]] && [[ "${service::1}" == [a-zA-Z] ]] && [ "${service::1}" != "-" ] && [ "${service::1}" != "(" ]); then
+      echo $service
+      echo "\connect ${service}" >> $DATA_EXPORT/$currentDate/db/$1.sql
+      docker exec -t "${DOCKER_CONTAINER}" pg_dump -U ${POSTGRES_USER} -d ${service} --data-only --no-privileges --no-owner --exclude-table-data '*._prisma_migrations' >> $DATA_EXPORT/$currentDate/db/$1.sql
+    fi 
+  done < <(docker exec -it "${DOCKER_CONTAINER}" psql -U $POSTGRES_USER -c "SELECT datname FROM pg_database WHERE datname <> 'postgres' AND datname <> 'master' AND datistemplate = false;" 2>&1)
 
   touch $DATA_EXPORT/$currentDate/global.txt
   while true; do
